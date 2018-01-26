@@ -110,13 +110,18 @@ class Plugin_Updater_v1
 
 	public function admin_notices()
 	{
+
+		if (!$this->has_license())
+			return;
+
 		$activate_url = admin_url('plugins.php#enter-license-' . $this->plugin_slug);
 
 		?>
+			<?php var_dump($this->has_license()); ?>
 			<div class="notice notice-info is-dismissible">
 				<p>
 					To completely utilize your copy of <i><?php echo $this->name; ?></i>, please 
-					<a href="<?php echo $activate_url; ?>">activate</a> it using the license provided during purchase.
+					<a href="<?php echo $activate_url; ?>">activates</a> it using the license provided during purchase.
 				</p>
 			</div>
 		<?php
@@ -129,6 +134,11 @@ class Plugin_Updater_v1
 			$query_args['license_key'] = $license_key;
 		}
 		return $query_args;
+	}
+
+	private function has_license()
+	{
+		return !empty($this->get_license());
 	}
 
 	private function get_license()
