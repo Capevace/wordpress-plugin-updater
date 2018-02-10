@@ -37,7 +37,7 @@ class Plugin_Updater_v1
 			'mateffy-plugin-updater-v1', 
 			plugin_dir_url(__FILE__) . '/assets/js/credentials.js', 
 			array('jquery'),
-			'v1'
+			'v1.1'
 		);
 
 		wp_enqueue_script('mateffy-plugin-updater-v1');
@@ -117,9 +117,11 @@ class Plugin_Updater_v1
 
 		?>
 			<div class="notice notice-info is-dismissible">
+				<h3>Activate WC Shipping Tracker with your Envato Purchase Code</h3>
 				<p>
 					To completely utilize your copy of <i><?php echo $this->name; ?></i>, please 
-					<a href="<?php echo $activate_url; ?>">activate</a> it using the license provided during purchase.
+					<a href="<?php echo $activate_url; ?>">activate</a> it using the <strong>Envato Purchase Code</strong>.<br>
+					If you don't know how to find your Purchase Code, please get help from <a href="https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-">here</a>.
 				</p>
 			</div>
 		<?php
@@ -152,38 +154,20 @@ class Plugin_Updater_v1
 	private function validate_license($license_key)
 	{
 		try {
-			$response = self::http_request(
+			$response = wp_remote_get(
 				$this->updater_url . '/validate.php?license_key=' . $license_key . '&slug=' . $this->plugin_slug
 			);
 
-			$data = json_decode($response);
+			if(is_wp_error($response))
+				return false;
+
+			$data = json_decode($response['body']);
 
 			return property_exists($data, 'valid') && $data->valid === true;
 		} catch (Exception $e) {
 			return false;
 		}
 	}
-
-	private static function http_request($url)
-	{
-		if (!function_exists('curl_init')){
-			return false;
-		}
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_REFERER, site_url());
-		curl_setopt($ch, CURLOPT_USERAGENT, 'MateffyPluginUpdater');
-		curl_setopt($ch, CURLOPT_HEADER, 0);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-		$output = curl_exec($ch);
-		curl_close($ch);
-		
-		return $output;
-	}
-
-
 }
 
 endif;

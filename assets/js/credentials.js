@@ -1,6 +1,10 @@
 var mateffyPluginUpdater100 = (function() {
+	var licenses = {};
+
 	function setupLicenseUI(config) {
-		var licenseStore = config.license ? config.license : '';
+		if (!licenses[config.slug])
+			licenses[config.slug] = config.license || '';
+
 		var licenseBtn = jQuery(
 			'a#enter-license-' + config.slug
 		);
@@ -24,7 +28,7 @@ var mateffyPluginUpdater100 = (function() {
 
 			var input = jQuery('<input />')
 				.attr('type', 'text')
-				.attr('value', licenseStore)
+				.attr('value', licenses[config.slug])
 				.attr('placeholder', 'Enter License');
 			var btn = jQuery('<button></button>')
 				.text('Save')
@@ -39,9 +43,13 @@ var mateffyPluginUpdater100 = (function() {
 						if (empty) {
 							saveLicense(config, '', function(success) {
 								if (success) {
-									licenseStore = '';
+									licenses[config.slug] = '';
 									editRow.remove();
 									editRow = null;
+
+									licenseBtn
+										.text('Enter License')
+										.css('color', '#3db634');
 								}
 							});
 
@@ -55,9 +63,13 @@ var mateffyPluginUpdater100 = (function() {
 						} else {
 							saveLicense(config, license, function(success) {
 								if (success) {
-									licenseStore = '';
+									licenses[config.slug] = license;
 									editRow.remove();
 									editRow = null;
+
+									licenseBtn
+										.text('License Settings')
+										.css('color', '');
 								}
 							});
 						}
