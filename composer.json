@@ -1,0 +1,14 @@
+{
+    "name": "smoolabs/wordpress-plugin-updater",
+    "description": "A library for WordPress plugins, to utilize license verification and auto-updating using WordPress License Server.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lukas Mateffy",
+            "email": "info@smoolabs.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
