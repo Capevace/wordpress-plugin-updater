@@ -4,7 +4,7 @@ namespace Smoolabs\V1;
 
 if (!class_exists('\\Smoolabs\\V1\\Plugin_Updater', false)) :
 
-class Plugin_Updater
+class PluginUpdater
 {
 	private $plugin_path;
 	private $plugin_file;
@@ -13,7 +13,7 @@ class Plugin_Updater
 
 	public function __construct($name, $updater_url, $plugin_slug, $plugin_path)
 	{
-		$this->version     = '1.2.1';
+		$this->version     = '1.2.2';
 		$this->name        = $name;
 		$this->updater_url = untrailingslashit($updater_url);
 		$this->plugin_slug = $plugin_slug;
@@ -106,7 +106,7 @@ class Plugin_Updater
 
 	private function includes()
 	{
-		include_once 'plugin-update-checker-4.4/plugin-update-checker.php';
+		include_once dirname(__DIR__, 2) . '/plugin-update-checker-4.4/plugin-update-checker.php';
 	}
 
 	public function admin_notices()
