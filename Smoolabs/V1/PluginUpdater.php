@@ -1,10 +1,10 @@
 <?php 
 
-namespace Mateffy;
+namespace Smoolabs\V1;
 
-if (!class_exists('\\Mateffy\\Plugin_Updater_v1', false)) :
+if (!class_exists('\\Smoolabs\\V1\\Plugin_Updater', false)) :
 
-class Plugin_Updater_v1
+class Plugin_Updater
 {
 	private $plugin_path;
 	private $plugin_file;
@@ -13,6 +13,7 @@ class Plugin_Updater_v1
 
 	public function __construct($name, $updater_url, $plugin_slug, $plugin_path)
 	{
+		$this->version     = '1.2';
 		$this->name        = $name;
 		$this->updater_url = untrailingslashit($updater_url);
 		$this->plugin_slug = $plugin_slug;
@@ -37,7 +38,7 @@ class Plugin_Updater_v1
 			'mateffy-plugin-updater-v1', 
 			plugin_dir_url(__FILE__) . '/assets/js/credentials.js', 
 			array('jquery'),
-			'v1.1'
+			$this->version
 		);
 
 		wp_enqueue_script('mateffy-plugin-updater-v1');
