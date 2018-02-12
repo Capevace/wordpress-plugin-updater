@@ -1,3 +1,3 @@
 <?php
 
-require __DIR__ . '/Smoolabs/V1/PluginUpdater.php';
+require __DIR__ . '/src/V1/PluginUpdater.php';

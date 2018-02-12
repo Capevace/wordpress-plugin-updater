@@ -156,7 +156,7 @@ class PluginUpdater
 	{
 		try {
 			$response = wp_remote_get(
-				$this->updater_url . '/validate.php?license_key=' . $license_key . '&slug=' . $this->plugin_slug
+				$this->updater_url . '/?action=verify&license_key=' . $license_key . '&slug=' . $this->plugin_slug
 			);
 
 			if(is_wp_error($response))
