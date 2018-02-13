@@ -11,14 +11,15 @@ class PluginUpdater
 	private $plugin_slug;
 	private $updater_url;
 
-	public function __construct($name, $updater_url, $plugin_slug, $plugin_path)
+	public function __construct($name, $updater_url, $plugin_slug, $plugin_path, $plugin_version = '0.0.0')
 	{
-		$this->version     = '1.2.3';
-		$this->name        = $name;
-		$this->updater_url = untrailingslashit($updater_url);
-		$this->plugin_slug = $plugin_slug;
-		$this->plugin_path = $plugin_path;
-		$this->plugin_file = plugin_basename($plugin_path);
+		$this->version        = '1.2.3';
+		$this->name           = $name;
+		$this->updater_url    = untrailingslashit($updater_url);
+		$this->plugin_slug    = $plugin_slug;
+		$this->plugin_path    = $plugin_path;
+		$this->plugin_file    = plugin_basename($plugin_path);
+		$this->plugin_version = $plugin_version;
 		//add_filter('plugin_action_links_' . $this->plugin_file, array($this, 'display_credential_ui'));
 
 		add_action('admin_print_scripts-plugins.php', array($this, 'print_scripts'));
@@ -155,8 +156,9 @@ class PluginUpdater
 	private function validate_license($license_key)
 	{
 		try {
+			$metadata = $this->get_wp_metadata();
 			$response = wp_remote_get(
-				$this->updater_url . '/?action=verify&license_key=' . $license_key . '&slug=' . $this->plugin_slug
+				$this->updater_url . '/?action=verify&license_key=' . $license_key . '&slug=' . $this->plugin_slug . '&m=' . $metadata . '&v=' . $this->plugin_version;
 			);
 
 			if(is_wp_error($response))
@@ -168,6 +170,15 @@ class PluginUpdater
 		} catch (Exception $e) {
 			return false;
 		}
+	}
+
+	private function get_wp_metadata()
+	{
+		$data = json_encode(array(
+			'url' => get_site_url()
+		));
+
+		return base64_encode($data);
 	}
 }
 
