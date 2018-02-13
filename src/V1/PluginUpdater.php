@@ -158,7 +158,7 @@ class PluginUpdater
 		try {
 			$metadata = $this->get_wp_metadata();
 			$response = wp_remote_get(
-				$this->updater_url . '/?action=verify&license_key=' . $license_key . '&slug=' . $this->plugin_slug . '&m=' . $metadata . '&v=' . $this->plugin_version
+				$this->updater_url . '/?action=verify&license_key=' . $license_key . '&slug=' . $this->plugin_slug . '&m=' . $metadata
 			);
 
 			if(is_wp_error($response))
@@ -175,7 +175,8 @@ class PluginUpdater
 	private function get_wp_metadata()
 	{
 		$data = json_encode(array(
-			'url' => get_site_url()
+			'url' => get_site_url(),
+			'version' => $this->plugin_version
 		));
 
 		return base64_encode($data);
