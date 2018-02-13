@@ -31,7 +31,9 @@ class PluginUpdater
 		add_filter('plugin_action_links_' . $this->plugin_file, array($this, 'filter_action_links'));
 
 		$this->includes();
-		$this->setup_updater();
+		$update_checker = $this->setup_updater();
+		// $this->getUniqueName($filterRoot . '_query_args')
+
 	}
 
 	public function print_scripts()
@@ -104,6 +106,8 @@ class PluginUpdater
 		);
 
 		$update_checker->addQueryArgFilter(array($this, 'update_check_filter'));
+
+		return $update_checker;
 	}
 
 	private function includes()
