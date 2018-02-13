@@ -32,8 +32,6 @@ class PluginUpdater
 
 		$this->includes();
 		$update_checker = $this->setup_updater();
-		// $this->getUniqueName($filterRoot . '_query_args')
-
 	}
 
 	public function print_scripts()
@@ -161,6 +159,9 @@ class PluginUpdater
 		if (!empty($license_key)) {
 			$query_args['license_key'] = $license_key;
 		}
+
+		$query_args['m'] = $this->get_wp_metadata();
+
 		return $query_args;
 	}
 
