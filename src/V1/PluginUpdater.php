@@ -158,7 +158,7 @@ class PluginUpdater
 		try {
 			$metadata = $this->get_wp_metadata();
 			$response = wp_remote_get(
-				$this->updater_url . '/?action=verify&license_key=' . $license_key . '&slug=' . $this->plugin_slug . '&m=' . $metadata . '&v=' . $this->plugin_version;
+				$this->updater_url . '/?action=verify&license_key=' . $license_key . '&slug=' . $this->plugin_slug . '&m=' . $metadata . '&v=' . $this->plugin_version
 			);
 
 			if(is_wp_error($response))
