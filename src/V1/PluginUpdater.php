@@ -26,6 +26,7 @@ class PluginUpdater
 		add_action('after_plugin_row_' . $this->plugin_file, array($this, 'after_plugin_row'), 10, 2);
 		add_action('wp_ajax_mpu_save_license_' . $this->plugin_slug, array($this, 'save_license'));
 		add_action('wp_ajax_mpu_validate_license_' . $this->plugin_slug, array($this, 'ajax_validate_license'));
+		add_action('wp_ajax_mpu_hide_notice_' . $this->plugin_slug, array($this, 'hide_notice'));
 		add_action('admin_notices', array($this, 'admin_notices'));
 		add_filter('plugin_action_links_' . $this->plugin_file, array($this, 'filter_action_links'));
 
@@ -115,18 +116,39 @@ class PluginUpdater
 		if ($this->has_license())
 			return;
 
+		$timeToShow = intval(get_option($this->plugin_slug . '_license_notice_hidden', 0));
+
+		if (time() < $timeToShow)
+			return;
+
 		$activate_url = admin_url('plugins.php#enter-license-' . $this->plugin_slug);
+		$hide_url = admin_url('admin-ajax.php?action=mpu_hide_notice_' . $this->plugin_slug);
 
 		?>
-			<div class="notice notice-info is-dismissible">
-				<h3>Activate WC Shipping Tracker with your Envato Purchase Code</h3>
-				<p>
-					To completely utilize your copy of <i><?php echo $this->name; ?></i>, please 
-					<a href="<?php echo $activate_url; ?>">activate</a> it using the <strong>Envato Purchase Code</strong>.<br>
-					If you don't know how to find your Purchase Code, please get help from <a href="https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-">here</a>.
-				</p>
+			<div class="notice notice-info" style="position: relative;">
+				<form method="post" action="<?php echo $hide_url; ?>">
+					<h3>Activate WC Shipping Tracker with your Envato Purchase Code</h3>
+					<p>
+						To completely utilize your copy of <i><?php echo $this->name; ?></i>, please 
+						<a href="<?php echo $activate_url; ?>">activate</a> it using the <strong>Envato Purchase Code</strong>.<br>
+						If you don't know how to find your Purchase Code, please get help from <a href="https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-">here</a>.
+					</p>
+
+					<button type="submit" class="notice-dismiss">
+						<span class="screen-reader-text">Diese Meldung ausblenden.</span>
+					</button>
+				</form>
 			</div>
 		<?php
+	}
+
+	public function hide_notice()
+	{
+		$two_weeks = 1 * 60 * 60 * 24 * 14;
+		update_option($this->plugin_slug . '_license_notice_hidden', intval(time()) + $two_weeks);
+
+		wp_redirect(admin_url('plugins.php'));
+		exit;
 	}
 
 	public function update_check_filter($query_args)
