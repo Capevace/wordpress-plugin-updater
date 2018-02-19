@@ -129,7 +129,7 @@ class PluginUpdater
 		?>
 			<div class="notice notice-info" style="position: relative;">
 				<form method="post" action="<?php echo $hide_url; ?>">
-					<h3>Activate WC Shipping Tracker with your Envato Purchase Code</h3>
+					<h3>Activate <?php echo $this->name; ?> with your Envato Purchase Code</h3>
 					<p>
 						To completely utilize your copy of <i><?php echo $this->name; ?></i>, please 
 						<a href="<?php echo $activate_url; ?>">activate</a> it using the <strong>Envato Purchase Code</strong>.<br>
