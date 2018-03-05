@@ -208,6 +208,13 @@ class PluginUpdater
 
 		return base64_encode($data);
 	}
+
+	public function is_activated()
+	{
+		$license = $this->get_license();
+
+		return $license !== null && $license !== '';
+	}
 }
 
 endif;
