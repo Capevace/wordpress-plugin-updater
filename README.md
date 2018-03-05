@@ -65,3 +65,4 @@ if ($plugin_updater->is_activated()) {
    * Add activation messages etc here, for example on your plugin settings page.
    */
 }
+```
