@@ -13,7 +13,7 @@ class PluginUpdater
 
 	public function __construct($name, $updater_url, $plugin_slug, $plugin_path, $plugin_version = '0.0.0')
 	{
-		$this->version        = '1.2.3';
+		$this->version        = '1.3.1';
 		$this->name           = $name;
 		$this->updater_url    = untrailingslashit($updater_url);
 		$this->plugin_slug    = $plugin_slug;
@@ -126,18 +126,22 @@ class PluginUpdater
 		$activate_url = admin_url('plugins.php#enter-license-' . $this->plugin_slug);
 		$hide_url = admin_url('admin-ajax.php?action=mpu_hide_notice_' . $this->plugin_slug);
 
+		$heading = 'Activate ' . $this->name . ' with your Envato Purchase Code';
+		$message = 'To completely utilize your copy of <i>' . $this->name . '</i>, please <a href="' . $activate_url . '">activate</a> it using the <strong>Envato Purchase Code</strong>.<br>If you don\'t know how to find your Purchase Code, please get help from <a href="https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-">here</a>.';
+
+		$heading = apply_filters('mpu_admin_notice_heading' . $this->plugin_file, $heading);
+		$message = apply_filters('mpu_admin_notice_message' . $this->plugin_file, $message);
+
 		?>
 			<div class="notice notice-info" style="position: relative;">
 				<form method="post" action="<?php echo $hide_url; ?>">
-					<h3>Activate <?php echo $this->name; ?> with your Envato Purchase Code</h3>
+					<h3><?php echo $heading; ?></h3>
 					<p>
-						To completely utilize your copy of <i><?php echo $this->name; ?></i>, please 
-						<a href="<?php echo $activate_url; ?>">activate</a> it using the <strong>Envato Purchase Code</strong>.<br>
-						If you don't know how to find your Purchase Code, please get help from <a href="https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-">here</a>.
+						<?php echo $message; ?>
 					</p>
 
 					<button type="submit" class="notice-dismiss">
-						<span class="screen-reader-text">Diese Meldung ausblenden.</span>
+						<span class="screen-reader-text">Hide notice.</span>
 					</button>
 				</form>
 			</div>
