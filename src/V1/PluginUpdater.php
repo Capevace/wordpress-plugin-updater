@@ -110,7 +110,7 @@ class PluginUpdater
 
 	private function includes()
 	{
-		include_once dirname(__DIR__, 2) . '/plugin-update-checker-4.4/plugin-update-checker.php';
+		include_once __DIR__ . '/../../plugin-update-checker-4.4/plugin-update-checker.php';
 	}
 
 	public function admin_notices()
