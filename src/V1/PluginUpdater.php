@@ -38,7 +38,7 @@ class PluginUpdater
 	{
 		wp_register_script(
 			'mateffy-plugin-updater-v1', 
-			plugin_dir_url(dirname(__DIR__, 1)) . '/assets/js/credentials.js', 
+			plugin_dir_url(realpath(__DIR__ . '../..')) . '/assets/js/credentials.js', 
 			array('jquery'),
 			$this->version
 		);
