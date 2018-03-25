@@ -13,7 +13,7 @@ class PluginUpdater
 
 	public function __construct($name, $updater_url, $plugin_slug, $plugin_path, $plugin_version = '0.0.0')
 	{
-		$this->version        = '1.3.1';
+		$this->version        = '1.3.2';
 		$this->name           = $name;
 		$this->updater_url    = untrailingslashit($updater_url);
 		$this->plugin_slug    = $plugin_slug;
