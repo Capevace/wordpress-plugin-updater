@@ -13,13 +13,14 @@ class PluginUpdater
 
 	public function __construct($name, $updater_url, $plugin_slug, $plugin_path, $plugin_version = '0.0.0')
 	{
-		$this->version        = '1.3.3';
-		$this->name           = $name;
-		$this->updater_url    = untrailingslashit($updater_url);
-		$this->plugin_slug    = $plugin_slug;
-		$this->plugin_path    = $plugin_path;
-		$this->plugin_file    = plugin_basename($plugin_path);
-		$this->plugin_version = $plugin_version;
+		$this->version          = '1.3.3';
+		$this->name             = $name;
+		$this->updater_url      = untrailingslashit($updater_url);
+		$this->plugin_slug      = $plugin_slug;
+		$this->plugin_path      = $plugin_path;
+		$this->plugin_file      = plugin_basename($plugin_path);
+		$this->plugin_version   = $plugin_version;
+		$this->license_settings = new LicenseSettings($name, $plugin_slug);
 		//add_filter('plugin_action_links_' . $this->plugin_file, array($this, 'display_credential_ui'));
 
 		add_action('admin_print_scripts-plugins.php', array($this, 'print_scripts'));
@@ -44,6 +45,9 @@ class PluginUpdater
 		);
 
 		wp_enqueue_script('mateffy-plugin-updater-v1');
+
+		$license = $this->get_license();
+		$this->license_settings->enqueueScript($license);
 	}
 
 	public function after_plugin_row($plugin_file, $plugin_data)
@@ -53,7 +57,6 @@ class PluginUpdater
 			jQuery(document).ready(function() {
 				mateffyPluginUpdater100.setupLicenseUI({
 					slug: '<?php echo $this->plugin_slug; ?>',
-					url: '<?php echo $this->updater_url; ?>',
 					license: '<?php echo $this->get_license(); ?>'
 				});
 			});
