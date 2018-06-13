@@ -7,7 +7,7 @@ There's two ways you can integrate this and enable automatic updates for your ow
 ### Using Composer
 If you're already using Composer, you'll know what to do.
 
-If not, you'll need to install Composer on your computer and run `composer init`. This will initialize composer in your plugins root.
+If not, you'll need to install Composer on your computer and run `composer init`. This will initialize composer in your packages root.
 
 Once that is complete, run this:
 ```shell
@@ -36,13 +36,13 @@ There's only one thing you'll need to do, to enable the integration once you've 
 
 In your plugins main file, paste this code:
 ```php
-$plugin_updater = new \Smoolabs\V1\PluginUpdater(
-  'Example Plugin Name',
-  'http://update-server-url.com',
-  'my-example-plugin',
-  __FILE__,
-  '1.0.0'
-);
+$plugin_updater = new \Smoolabs\V2\PluginUpdater(array(
+  'name'      => 'Example Plugin Name',
+  'version'   => '1.0.0',
+  'path'      => __FILE__,
+  'slug'      => 'my-example-plugin',
+  'serverUrl' => 'http://update-server-url.com/'
+));
 ```
 Now, replace *Example Plugin Name* with your plugins name, *http://update-server-url.com* with the URL where you hosted the update server, *my-example-plugin* with your plugin slug (for example the plugin folders name) and *1.0.0* with your current plugins version.
 
@@ -54,7 +54,7 @@ You may want to stop your buyers from using your plugin until they have entered 
 // Your Updater instance
 $plugin_updater = new \Smoolabs\...;
 
-if ($plugin_updater->is_activated()) {
+if ($plugin_updater->isActivated()) {
   /* 
    * The User has activated the plugin.
    * Add your plugin functionality here.
@@ -66,3 +66,5 @@ if ($plugin_updater->is_activated()) {
    */
 }
 ```
+
+*Please make sure that this complies with Envato's rules on locking fieatures behind licenses! The plugin may not be accepted otherwise.*
