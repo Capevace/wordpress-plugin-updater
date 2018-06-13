@@ -50,10 +50,10 @@ class LicenseSettings
             'active'       => $license !== null && $license !== '' && $license !== false
         );
 
-        $vueUrl = plugin_dir_url(__DIR__ . '../../../assets/js/vue-2.5.16.min.js');
+        $vueUrl = plugins_url('vue-2.5.16.min.js', realpath(__DIR__ . '/../../assets/js/vue-2.5.16.min.js'));
         ?>
 
-        <script type="text/javascript" src="<?php echo $vueUrl . 'vue-2.5.16.min.js'; ?>"></script>
+        <script type="text/javascript" src="<?php echo $vueUrl; ?>"></script>
         <script type="text/javascript">
             (function($, data) {
                 <?php echo file_get_contents(__DIR__ . '../../../assets/js/credentials-transpiled.js'); ?>
