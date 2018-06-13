@@ -76,17 +76,17 @@ class LicenseSettings
 
     public static function getSavedLicense($pluginSlug)
     {
-        return get_option('mpu_license_' . $pluginSlug);
+        return get_option('wpls_license_' . $pluginSlug);
     }
 
     public static function saveLicense($license, $pluginSlug)
     {
         if ($license === null || $license === '') {
-            delete_option('mpu_license_' . $pluginSlug);
+            delete_option('wpls_license_' . $pluginSlug);
             return;
         }
 
-        update_option('mpu_license_' . $pluginSlug, $license, true);
+        update_option('wpls_license_' . $pluginSlug, $license, true);
     }
 
     public static function hasLicenseSaved($pluginSlug)
