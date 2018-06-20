@@ -1,3 +1,5 @@
+/* global Vue $ data ajaxurl */
+
 let app;
 let column;
 let visible = false;
@@ -5,7 +7,7 @@ const id = 'license-settings-' + data.slug;
 
 const settingsButton = $('a#enter-license-' + data.slug).click(function(e) {
     e.preventDefault();
-
+    
     if (visible)
         $('#' + id).css('display', 'none');
     else
@@ -24,13 +26,11 @@ else
         .css('color', '');
 
 const rootElement = settingsButton.closest('tr');
-column = $('<tr id="' + id + '"></tr>').html(
-    '<td></td><td><license-settings></license-settings></td>'
+column = $('<tr class="active" id="' + id + '"></tr>').html(
+    '<th class="check-column"></th><td><license-settings></license-settings></td><td></td>'
 );
 column.css('display', 'none');
 rootElement.after(column);
-
-const Vue = Vue2516;
 
 Vue.mixin({
     computed: {
@@ -59,7 +59,7 @@ Vue.component('activation-view', {
 
             <label style="display: block;">
                 <input style="float: left;margin-top: 0px;" type="checkbox" v-model="consent"/>
-                <span style="font-size: 11px;display: block;margin-left: 22px;">
+                <span style="font-size: 11px;display: block;margin: 10px 0 10px 27px">
                     {{ $data.translations['I allow the following data to be sent to our update servers: license key, site url, WordPress version, PHP version and package version. This data is required to provide license activation and update functionality.'] }}
                 </span>
             </label>
@@ -85,32 +85,31 @@ Vue.component('activation-view', {
 
             this.$emit('startLoading');
 
-            jQuery
-                .ajax({
-                    type: 'post',
-                    url: ajaxurl,
-                    data: {
-                        action: 'wpls_activate_' + this.$data.slug,
-                        license_key: this.license
-                    }
-                })
-                .done(response => {
-                    this.$emit('stopLoading');
+            $.ajax({
+                type: 'post',
+                url: ajaxurl,
+                data: {
+                    action: 'wpls_activate_' + this.$data.slug,
+                    license_key: this.license
+                }
+            })
+            .done(response => {
+                this.$emit('stopLoading');
 
-                    if (response.activated) {
-                        this.$emit('activated');
-                        alert('The plugin was successfully activated!');
-                    } else {
-                        alert(response.error.message);
-                    }
-                })
-                .fail(response => {
-                    this.$emit('stopLoading');
+                if (response.activated) {
+                    this.$emit('activated');
+                    alert('The plugin was successfully activated!');
+                } else {
+                    alert(response.error.message);
+                }
+            })
+            .fail(response => {
+                this.$emit('stopLoading');
 
-                    alert(
-                        'An error occurred in your WordPress instance while processing the license activation event.'
-                    );
-                });
+                alert(
+                    'An error occurred in your WordPress instance while processing the license activation event.'
+                );
+            });
         }
     }
 });
@@ -173,38 +172,37 @@ Vue.component('settings-view', {
         deactivate() {
             this.startLoading();
 
-            jQuery
-                .ajax({
-                    type: 'post',
-                    url: ajaxurl,
-                    data: {
-                        action: 'wpls_deactivate_' + this.$data.slug
-                    }
-                })
-                .done(response => {
-                    this.stopLoading();
+            $.ajax({
+                type: 'post',
+                url: ajaxurl,
+                data: {
+                    action: 'wpls_deactivate_' + this.$data.slug
+                }
+            })
+            .done(response => {
+                this.stopLoading();
 
-                    if (response.deactivated) {
-                        this.active = false;
+                if (response.deactivated) {
+                    this.active = false;
 
-                        settingsButton
-                            .text(this.$data.translations['Enter License'])
-                            .css('color', '#3db634');
-
-                        alert(
-                            'The plugin was successfully deactivated! The license can now be used on another site.'
-                        );
-                    } else {
-                        alert(response.error.message);
-                    }
-                })
-                .fail(response => {
-                    this.stopLoading();
+                    settingsButton
+                        .text(this.$data.translations['Enter License'])
+                        .css('color', '#3db634');
 
                     alert(
-                        'An error occurred in your WordPress instance while processing the license deactivation event.'
+                        'The plugin was successfully deactivated! The license can now be used on another site.'
                     );
-                });
+                } else {
+                    alert(response.error.message);
+                }
+            })
+            .fail(response => {
+                this.stopLoading();
+
+                alert(
+                    'An error occurred in your WordPress instance while processing the license deactivation event.'
+                );
+            });
         },
 
         onActivation() {
@@ -220,7 +218,7 @@ Vue.component('settings-view', {
 
 Vue.component('license-settings', {
     template: `
-        <div style="padding: 20px;">
+        <div>
             <h2 style="display: inline-block; margin-top: 0px;">
                 {{ $data.name }}
                 <span style="font-weight: 400;">{{ $data.translations['License Settings'] }}</span>

@@ -51,12 +51,13 @@ class LicenseSettings
         );
 
         $vueUrl = plugin_dir_url(__DIR__ . '../../../assets/js/vue-2.5.16.min.js');
+        $debug = defined('WP_DEBUG') && WP_DEBUG;
         ?>
 
         <script type="text/javascript" src="<?php echo $vueUrl . 'vue-2.5.16.min.js'; ?>"></script>
         <script type="text/javascript">
             (function($, data) {
-                <?php echo file_get_contents(__DIR__ . '../../../assets/js/credentials-transpiled.js'); ?>
+                <?php echo file_get_contents(__DIR__ . '../../../assets/js/credentials' . (WP_DEBUG ? '' : '-transpiled') . '.js'); ?>
             })(jQuery, <?php echo json_encode($data); ?>);
         </script>
         <?php
