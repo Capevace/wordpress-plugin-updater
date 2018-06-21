@@ -10,7 +10,6 @@ class LicenseSettings
     protected $slug;
     
     public static $VUE_VERSION = '2.5.16';
-    
     public static $VUE_FILE = 'vue-2.5.16.min.js';
 
     public function __construct($config)
@@ -19,7 +18,7 @@ class LicenseSettings
         $this->slug = $config['slug'];
 
         $pluginFile = plugin_basename($config['path']);
-        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'), 99);;
+        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'), 99);
         add_action('after_plugin_row_' . $pluginFile, array($this, 'after_plugin_row'), 10, 2);
         add_filter('plugin_action_links_' . $pluginFile, array($this, 'addLicenseSettingsLink'));
     }
@@ -68,10 +67,9 @@ class LicenseSettings
             'license'      => $license,
             'active'       => $license !== null && $license !== '' && $license !== false
         );
-
+        
         $debug = defined('WP_DEBUG') && WP_DEBUG;
         ?>
-
         <script type="text/javascript">
             (function($, data) {
                 <?php echo file_get_contents(__DIR__ . '../../../assets/js/credentials' . (WP_DEBUG ? '' : '-transpiled') . '.js'); ?>
