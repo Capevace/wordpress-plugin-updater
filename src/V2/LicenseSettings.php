@@ -9,8 +9,8 @@ class LicenseSettings
     protected $name;
     protected $slug;
     
-    public static $VUE_VERSION = '2.5.16';
-    public static $VUE_FILE = 'vue-2.5.16.min.js';
+    public static $VUE_VERSION    = '2.5.16';
+    public static $VUE_FILE       = 'vue-2.5.16.min.js';
 
     public function __construct($config)
     {
@@ -18,8 +18,8 @@ class LicenseSettings
         $this->slug = $config['slug'];
 
         $pluginFile = plugin_basename($config['path']);
-        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'), 99);
-        add_action('after_plugin_row_' . $pluginFile, array($this, 'after_plugin_row'), 10, 2);
+        add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScriptsHook'), 99);
+        add_action('after_plugin_row_' . $pluginFile, array($this, 'afterPluginRowHook'), 10, 2);
         add_filter('plugin_action_links_' . $pluginFile, array($this, 'addLicenseSettingsLink'));
     }
     
@@ -27,7 +27,7 @@ class LicenseSettings
      * Enqueue VueJS if not already enqueued to the plugins.php page.
      * This can be ensured through the priority 99.
      */
-    public function admin_enqueue_scripts($hook_suffix) {
+    public function adminEnqueueScriptsHook($hook_suffix) {
         if ($hook_suffix === 'plugins.php') {
             if (!wp_script_is('vue', 'registered')) {
                 $vueUrl = plugin_dir_url(realpath(trailingslashit(__DIR__) . '../../assets/js/'. self::$VUE_FILE));
@@ -37,7 +37,7 @@ class LicenseSettings
         }
     }
 
-    public function after_plugin_row()
+    public function afterPluginRowHook()
     {
         $license = self::getSavedLicense($this->slug);
         $translations = array(
