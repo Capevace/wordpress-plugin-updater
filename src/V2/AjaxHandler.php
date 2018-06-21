@@ -33,7 +33,7 @@ class AjaxHandler
         $license  = sanitize_text_field($_POST['license_key']);
         $response = $this->serverCommunicator->activateLicense($license);
         
-        if ($response->activated === true) {
+        if (isset($response->activated) && $response->activated === true) {
             LicenseSettings::saveLicense($license, $this->pluginSlug);
             LicenseSettings::saveActivationId($response->activation_id, $this->pluginSlug);
         }
@@ -48,10 +48,11 @@ class AjaxHandler
         
         $activationId = LicenseSettings::getSavedActivationId($this->pluginSlug);
         $response = $this->serverCommunicator->deactivateLicense($activationId);
+      
         LicenseSettings::saveLicense(null, $this->pluginSlug);
         LicenseSettings::saveActivationId(null, $this->pluginSlug);
 
-        if ($response->deactivated !== true) {
+        if (isset($response->deactivated) && $response->deactivated === true) {
             wp_send_json(array(
                 'deactivated' => false, 
                 'error' => array(

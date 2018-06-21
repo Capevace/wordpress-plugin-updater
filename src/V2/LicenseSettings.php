@@ -8,6 +8,9 @@ class LicenseSettings
 {
     protected $name;
     protected $slug;
+    
+    public static $VUE_VERSION = '2.5.16';
+    public static $VUE_FILE = 'vue-2.5.16.min.js';
 
     public function __construct($config)
     {
@@ -15,11 +18,26 @@ class LicenseSettings
         $this->slug = $config['slug'];
 
         $pluginFile = plugin_basename($config['path']);
-        add_action('after_plugin_row_' . $pluginFile, array($this, 'enqueueScript'), 10, 2);
+        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'), 99);
+        add_action('after_plugin_row_' . $pluginFile, array($this, 'after_plugin_row'), 10, 2);
         add_filter('plugin_action_links_' . $pluginFile, array($this, 'addLicenseSettingsLink'));
     }
+    
+    /**
+     * Enqueue VueJS if not already enqueued to the plugins.php page.
+     * This can be ensured through the priority 99.
+     */
+    public function admin_enqueue_scripts($hook_suffix) {
+        if ($hook_suffix === 'plugins.php') {
+            if (!wp_script_is('vue', 'registered')) {
+                $vueUrl = plugin_dir_url(realpath(trailingslashit(__DIR__) . '../../assets/js/'. self::$VUE_FILE));
+                wp_register_script('vue', $vueUrl . self::$VUE_FILE, array(), self::$VUE_VERSION);
+            }
+            wp_enqueue_script('vue');
+        }
+    }
 
-    public function enqueueScript()
+    public function after_plugin_row()
     {
         $license = self::getSavedLicense($this->slug);
         $translations = array(
@@ -49,14 +67,12 @@ class LicenseSettings
             'license'      => $license,
             'active'       => $license !== null && $license !== '' && $license !== false
         );
-
-        $vueUrl = plugins_url('vue-2.5.16.min.js', realpath(__DIR__ . '/../../assets/js/vue-2.5.16.min.js'));
+        
+        $debug = defined('WP_DEBUG') && WP_DEBUG;
         ?>
-
-        <script type="text/javascript" src="<?php echo $vueUrl; ?>"></script>
         <script type="text/javascript">
             (function($, data) {
-                <?php echo file_get_contents(__DIR__ . '../../../assets/js/credentials-transpiled.js'); ?>
+                <?php echo file_get_contents(__DIR__ . '../../../assets/js/credentials' . (WP_DEBUG ? '' : '-transpiled') . '.js'); ?>
             })(jQuery, <?php echo json_encode($data); ?>);
         </script>
         <?php

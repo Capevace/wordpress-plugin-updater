@@ -13,7 +13,7 @@ class ServerCommunicator
 
     public function __construct($config)
     {
-        $this->serverUrl     = $config['serverUrl'];
+        $this->serverUrl     = trailingslashit($config['serverUrl']);
         $this->pluginVersion = $config['version'];
         $this->pluginSlug    = $config['slug'];
     }
@@ -28,7 +28,7 @@ class ServerCommunicator
         ));
 
         if (!$response) {
-            return array('activated' => false, 'error' => array('code' => 500, 'message' => 'An unknown error occurred.', 'response' => $response));
+            return (object) array('activated' => false, 'error' => array('code' => 500, 'message' => 'An unknown error occurred.', 'response' => $response));
         }
 
         return $response;
@@ -39,7 +39,7 @@ class ServerCommunicator
         $response = $this->httpRequest('api/v1/activation/' . $activationId . '/deactivate');
 
         if (!$response) {
-            return array('deactivated' => false, 'error' => array('code' => 500, 'message' => 'An unknown error occurred.', 'response' => $response));
+            return (object) array('deactivated' => false, 'error' => array('code' => 500, 'message' => 'An unknown error occurred.', 'response' => $response));
         }
 
         return $response;
@@ -59,7 +59,7 @@ class ServerCommunicator
     protected function httpRequest($path, $body = array())
     {
         $url = $this->serverUrl . $path;
-
+        
         try {
             $response = wp_remote_post($url, array(
                 'body' => $body,
