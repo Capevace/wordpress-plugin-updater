@@ -42,7 +42,9 @@ class LicenseSettings
         $license = self::getSavedLicense($this->slug);
         $translations = array(
             'Enter License'                                              => __('Enter License', 'smoolabs-updater'),
+            'Your license key:'                                          => __('Your license key:', 'smoolabs-updater'),
             'License or Envato Purchase Code'                            => __('License or Envato Purchase Code', 'smoolabs-updater'),
+            'Where do I find my Envato purchase code?'                   => __('Where do I find my Envato purchase code?', 'smoolabs-updater'),
             'License Settings'                                           => __('License Settings', 'smoolabs-updater'),
             'Enter License or Envato Purchase Code'                      => __('Enter License or Envato Purchase Code', 'smoolabs-updater'),
             'Save'                                                       => __('Save', 'smoolabs-updater'),
