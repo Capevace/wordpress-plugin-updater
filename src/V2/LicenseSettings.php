@@ -14,8 +14,9 @@ class LicenseSettings
 
     public function __construct($config)
     {
-        $this->name = $config['name'];
-        $this->slug = $config['slug'];
+        $this->name       = $config['name'];
+        $this->slug       = $config['slug'];
+        $this->pluginPath = trailingslashit($config['path']);
 
         $pluginFile = plugin_basename($config['path']);
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScriptsHook'), 99);

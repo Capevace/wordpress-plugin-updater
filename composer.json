@@ -10,7 +10,9 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {},
+    "require": {
+        "erusev/parsedown": "^1.7"
+    },
     "autoload": {
         "psr-4": {
             "Smoolabs\\": "src/"

@@ -70,10 +70,11 @@ class PluginUpdater
 	protected $ajaxHandler;
 
 	/**
-	 * The class handling fetching new admin notices and displaying them.
-	 * @var AdminNotices
+	 * The class handling the fetching and displaying of announcements.
+	 *
+	 * @var AnnouncementService
 	 */
-	protected $adminNotices;
+	protected $announcementService;
 
 	/**
 	 * Initialize the plugin updater.
@@ -99,10 +100,10 @@ class PluginUpdater
 		$this->serverUrl     = untrailingslashit($config['serverUrl']);
 
 		// Initialize Systems
-		$this->licenseSettings    = new LicenseSettings($config);
-		$this->serverCommunicator = new ServerCommunicator($config);
-		$this->ajaxHandler        = new AjaxHandler($config, $this->serverCommunicator);
-		$this->adminNotices       = new AdminNotices();
+		$this->licenseSettings     = new LicenseSettings($config);
+		$this->serverCommunicator  = new ServerCommunicator($config);
+		$this->announcementService = new AnnouncementService($config, $this->serverCommunicator);
+		$this->ajaxHandler         = new AjaxHandler($config, $this->serverCommunicator);
 
 		$update_checker = $this->setupPluginUpdateChecker();
 	}

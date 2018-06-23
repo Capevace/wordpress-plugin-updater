@@ -24,6 +24,10 @@ class AjaxHandler
             'wp_ajax_wpls_deactivate_' . $this->pluginSlug, 
             array($this, 'handleDeactivationAjaxRequest')
         );
+        add_action(
+            'wp_ajax_wpls_dismiss_announcement_' . $this->pluginSlug,
+            array($this, 'handleDismissAnnouncementAjaxRequest')
+        );
     }
 
     public function handleActivationAjaxRequest()
@@ -68,10 +72,20 @@ class AjaxHandler
         wp_die();
     }
 
+    public function handleDismissAnnouncementAjaxRequest()
+    {
+        $this->checkPermissisons();
+
+        $announcementId = $_POST['announcement_id'];
+        AnnouncementService::dismissAnnouncement($announcementId);
+
+        wp_die();
+    }
+
     protected function checkPermissisons()
     {
         if (!current_user_can('activate_plugins')) {
-            wp_send_json(array('activated' => false, 'error' => array('code' => 401, 'message' => 'You do not have the permissions to do that.')));
+            wp_send_json(array('error' => array('code' => 401, 'message' => 'You do not have the permissions to do that.')));
             wp_die();
         }
     }
