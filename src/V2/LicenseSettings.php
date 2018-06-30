@@ -41,6 +41,7 @@ class LicenseSettings
     {
         $license = self::getSavedLicense($this->slug);
         $translations = array(
+            'Check for updates'                                          => __('Check for updates', 'plugin-update-checker'),
             'Enter License'                                              => __('Enter License', 'smoolabs-updater'),
             'Your license key:'                                          => __('Your license key:', 'smoolabs-updater'),
             'License or Envato Purchase Code'                            => __('License or Envato Purchase Code', 'smoolabs-updater'),
@@ -61,13 +62,22 @@ class LicenseSettings
             'To use the extended funcionality of this plugin, you need to allow the required data to be sent to our servers. Don\'t worry, we don\'t share that data with anyone. But it is required to verify an activated license.' => __('To use the extended funcionality of this plugin, you need to allow the required data to be sent to our servers. Don\'t worry, we don\'t share that data with anyone. But it is required to verify an activated license.', 'smoolabs-updater'),
             'Please provide a license key.' => __('Please provide a license key.', 'smoolabs-updater'),
         );
+        
+        // Get PUC "Check for updates" link
+        $checkUrl = wp_nonce_url(add_query_arg(
+        	array(
+        		'puc_check_for_updates' => 1,
+        		'puc_slug' => $this->slug,
+        	),self_admin_url('plugins.php')
+        ), 'puc_check_for_updates');
 
         $data = array(
             'translations' => $translations,
             'name'         => $this->name,
             'slug'         => $this->slug,
             'license'      => $license,
-            'active'       => $license !== null && $license !== '' && $license !== false
+            'active'       => $license !== null && $license !== '' && $license !== false,
+            'checkUrl'     => $checkUrl
         );
         
         $debug = defined('WP_DEBUG') && WP_DEBUG;

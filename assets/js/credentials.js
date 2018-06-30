@@ -137,7 +137,10 @@ Vue.component('settings-view', {
 
                 <div style="display: flex; height: 100px;" v-if="site === 'overview' && active">
                     <div style="display: flex; flex: 0 0 100%; justify-content: center;align-items: center;flex-direction: column;">
-                        <button class="button-primary" @click.prevent="deactivate">Deactivate</button>
+                        <span>
+                            <button class="button-primary" style="margin-right:10px;" @click.prevent="checkForUpdate">Check for updates</button>
+                            <button class="button" @click.prevent="deactivate">Deactivate</button>
+                        </span>
                         <div style="margin-top: 10px;">{{ $data.translations['Your license key:'] }}</div>
                         <div style="font-family: monospace;">{{ $data.license }}</div>
                     </div>
@@ -163,6 +166,9 @@ Vue.component('settings-view', {
         },
         stopLoading() {
             this.loading = false;
+        },
+        checkForUpdate() {
+            window.location.href = this.$data.checkUrl.replace(/&amp;/g, '&');
         },
         activate() {
             this.site = 'activation';
