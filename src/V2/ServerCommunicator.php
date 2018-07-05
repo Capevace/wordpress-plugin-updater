@@ -10,17 +10,19 @@ class ServerCommunicator
     protected $pluginVersion;
     protected $pluginSlug;
     protected $siteUrl;
+    protected $unsafeDebugMode = false;
 
     public function __construct($config)
     {
-        $this->serverUrl     = trailingslashit($config['serverUrl']);
-        $this->pluginVersion = $config['version'];
-        $this->pluginSlug    = $config['slug'];
+        $this->serverUrl       = trailingslashit($config['serverUrl']);
+        $this->pluginVersion   = $config['version'];
+        $this->pluginSlug      = $config['slug'];
+        $this->unsafeDebugMode = defined('WP_DEBUG') && WP_DEBUG;
     }
 
     public function activateLicense($license_key)
     {
-        $response = $this->httpRequest('api/v1/license/activate', array(
+        $response = $this->httpPostRequest('api/v1/license/activate', array(
             'license'   => $license_key,
             'slug'      => $this->pluginSlug,
             'site'      => $this->getSiteUrl(),
@@ -36,12 +38,22 @@ class ServerCommunicator
 
     public function deactivateLicense($activationId)
     {
-        $response = $this->httpRequest('api/v1/activation/' . $activationId . '/deactivate');
+        $response = $this->httpPostRequest('api/v1/activation/' . $activationId . '/deactivate');
 
         if (!$response) {
             return (object) array('deactivated' => false, 'error' => array('code' => 500, 'message' => 'An unknown error occurred.', 'response' => $response));
         }
 
+        return $response;
+    }
+
+    public function fetchAnnouncements($lastFetchTime, $packages)
+    {
+        $response = $this->httpGetRequest('api/v1/announcements/newest', array(
+            'after' => $lastFetchTime,
+            'packages' => implode(',', $packages)
+        ));
+               
         return $response;
     }
 
@@ -56,16 +68,44 @@ class ServerCommunicator
         return $url;
     }
 
-    protected function httpRequest($path, $body = array())
+    protected function httpPostRequest($path, $body = array())
     {
         $url = $this->serverUrl . $path;
         
         try {
             $response = wp_remote_post($url, array(
-                'body' => $body,
-                'sslverify' => false
+                'body'      => $body,
+                'headers' => array(
+                    'Accept' => 'application/json'
+                ),
+                'sslverify' => $this->unsafeDebugMode
             ));
             
+            if(is_wp_error($response)) {
+                return false;
+            }
+
+            $data = json_decode($response['body']);
+
+            return $data;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    protected function httpGetRequest($path, $query = array())
+    {
+        $url = $this->serverUrl . $path;
+        $url = add_query_arg($query, $url);
+        
+        try {
+            $response = wp_remote_get($url, array(
+                'headers' => array(
+                    'Accept' => 'application/json'
+                ),
+                'sslverify' => $this->unsafeDebugMode
+            ));
+
             if(is_wp_error($response)) {
                 return false;
             }
