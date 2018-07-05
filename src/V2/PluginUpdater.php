@@ -10,6 +10,12 @@ if (!class_exists('\\Smoolabs\\V2\\Plugin_Updater', false)) :
 class PluginUpdater 
 {
 	/**
+	 * The slugs of installed plugins.
+	 * @var array
+	 */
+	public static $installedPlugins = array();
+
+	/**
 	 * The name of the plugin.
 	 * @var string
 	 */
@@ -98,6 +104,8 @@ class PluginUpdater
 		$this->pluginFile    = plugin_basename($this->pluginPath);
 		$this->pluginSlug    = $config['slug'];
 		$this->serverUrl     = untrailingslashit($config['serverUrl']);
+
+		array_push(static::$installedPlugins, $this->pluginSlug);
 
 		// Initialize Systems
 		$this->licenseSettings     = new LicenseSettings($config);

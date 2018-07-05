@@ -47,10 +47,13 @@ class ServerCommunicator
         return $response;
     }
 
-    public function fetchAnnouncements($lastFetchTime)
+    public function fetchAnnouncements($lastFetchTime, $packages)
     {
-        $response = $this->httpGetRequest('api/v1/announcements/newest', array('after' => $lastFetchTime));
-        
+        $response = $this->httpGetRequest('api/v1/announcements/newest', array(
+            'after' => $lastFetchTime,
+            'packages' => implode(',', $packages)
+        ));
+               
         return $response;
     }
 

@@ -55,8 +55,9 @@ class AnnouncementService
 
     public function updateAnnouncements()
     {
-        $lastFetchTime = static::getLastFetchTime($this->pluginSlug);
-        $newAnnouncements = $this->serverCommunicator->fetchAnnouncements($lastFetchTime);
+        $lastFetchTime    = static::getLastFetchTime($this->pluginSlug);
+        $packages         = PluginUpdater::$installedPlugins;
+        $newAnnouncements = $this->serverCommunicator->fetchAnnouncements($lastFetchTime, $packages);
         
         if (!$newAnnouncements)
             return;

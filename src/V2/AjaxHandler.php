@@ -25,7 +25,7 @@ class AjaxHandler
             array($this, 'handleDeactivationAjaxRequest')
         );
         add_action(
-            'wp_ajax_wpls_dismiss_announcement_' . $this->pluginSlug,
+            'wp_ajax_wpls_v3_dismiss_announcement_' . $this->pluginSlug,
             array($this, 'handleDismissAnnouncementAjaxRequest')
         );
     }

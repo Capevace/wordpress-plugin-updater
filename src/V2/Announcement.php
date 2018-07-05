@@ -60,7 +60,7 @@ class Announcement
                             url: ajaxurl,
                             method: 'post',
                             data: {
-                                action: 'wpls_dismiss_announcement_<?php echo $renderingPluginSlug; ?>',
+                                action: 'wpls_v3_dismiss_announcement_<?php echo $renderingPluginSlug; ?>',
                                 announcement_id: '<?php echo $this->id; ?>'
                             }
                         });
@@ -75,10 +75,14 @@ class Announcement
     {
         $label = '';
 
-        foreach ($this->packages as $index => $package) {
+        $packages = array_filter($this->packages, function($package) {
+            return in_array($package->slug, PluginUpdater::$installedPlugins);
+        });
+
+        foreach ($packages as $index => $package) {
             if ($index === 0)
                 $label .= $package->name;
-            else if ($index < count($this->packages) - 1)
+            else if ($index < count($packages) - 1)
                 $label .= ', ' . $package->name;
             else
                 $label .= ' and ' . $package->name;
