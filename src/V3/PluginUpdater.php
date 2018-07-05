@@ -112,6 +112,7 @@ class PluginUpdater
 		$this->pluginSlug    = $config['slug'];
 		$this->serverUrl     = untrailingslashit($config['serverUrl']);
 
+		// Add to global list of plugins using WPLS
 		array_push(static::$installedPlugins, $this->pluginSlug);
 
 		// Initialize Systems

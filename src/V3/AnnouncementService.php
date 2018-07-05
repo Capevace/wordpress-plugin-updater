@@ -15,6 +15,7 @@ class AnnouncementService
     {
         $this->serverCommunicator = $serverCommunicator;
         $this->pluginSlug         = $config['slug'];
+        $this->pluginPath         = $config['path'];
 
         add_action('admin_notices', array($this, 'renderAdminNotices'));
         //add_action('wp_ajax_wpls_hide_notice_' . $this->plugin_slug, array($this, 'hide_notice'));
@@ -58,7 +59,12 @@ class AnnouncementService
         $lastFetchTime    = static::getLastFetchTime($this->pluginSlug);
         $packages         = PluginUpdater::$installedPlugins;
         $newAnnouncements = $this->serverCommunicator->fetchAnnouncements($lastFetchTime, $packages);
-        
+
+        // Update all the fetch times
+        foreach (PluginUpdater::$installedPlugins as $plugin) {
+            static::setLastFetchTime($plugin, date('Y-m-d H:i:s T'));
+        }
+
         if (!$newAnnouncements)
             return;
 

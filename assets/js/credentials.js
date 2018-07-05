@@ -33,9 +33,11 @@ column = $('<tr class="active" id="' + id + '"></tr>').html(
 column.css('display', 'none');
 rootElement.after(column);
 
+const PLUGIN_DATA = data;
 Vue.mixin({
     computed: {
-        $data: () => data
+        $data: () => PLUGIN_DATA,
+        $wplsTranslations: () => PLUGIN_DATA.translations
     }
 });
 
@@ -44,8 +46,8 @@ Vue.component('deactivation-view', {
         <div>
             <span style="font-size: 15px; font-weight: 600;margin-bottom: 10px;display: block;">Deactivate Plugin</span>
 
-            <p>{{ $data.translations['Are you sure you want to deactivate the plugin? This will free up the license to be used on a different site.'] }}</p>
-            <button class="button-primary">{{ $data.translations['Deactivate'] }}</button>
+            <p>{{ $wplsTranslations['Are you sure you want to deactivate the plugin? This will free up the license to be used on a different site.'] }}</p>
+            <button class="button-primary">{{ $wplsTranslations['Deactivate'] }}</button>
         </div>
     `
 });
@@ -55,17 +57,17 @@ Vue.component('activation-view', {
         <div>
             <span style="font-size: 15px; font-weight: 600;margin-bottom: 10px;display: block;">Activate Plugin</span>
 
-            <label style="display: block;">{{ $data.translations['License or Envato Purchase Code'] }} (<a href="https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-" target="_blank">{{ $data.translations['Where do I find my Envato purchase code?'] }}</a>)</label>
-            <input style="display: block; width: 100%; margin-bottom: 10px;" type="text" v-model="license" :placeholder="$data.translations['Enter License or Envato Purchase Code']" />
+            <label style="display: block;">{{ $wplsTranslations['License or Envato Purchase Code'] }} (<a href="https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-" target="_blank">{{ $wplsTranslations['Where do I find my Envato purchase code?'] }}</a>)</label>
+            <input style="display: block; width: 100%; margin-bottom: 10px;" type="text" v-model="license" :placeholder="$wplsTranslations['Enter License or Envato Purchase Code']" />
 
             <label style="display: block;">
                 <input style="float: left;margin-top: 0px;" type="checkbox" v-model="consent"/>
                 <span style="font-size: 11px;display: block;margin: 10px 0 10px 27px">
-                    {{ $data.translations['I allow the following data to be sent to our update servers: license key, site url, WordPress version, PHP version and package version. This data is required to provide license activation and update functionality.'] }}
+                    {{ $wplsTranslations['I allow the following data to be sent to our update servers: license key, site url, WordPress version, PHP version and package version. This data is required to provide license activation and update functionality.'] }}
                 </span>
             </label>
 
-            <button class="button-primary" @click.prevent="activate">{{ $data.translations['Activate'] }}</button>
+            <button class="button-primary" @click.prevent="activate">{{ $wplsTranslations['Activate'] }}</button>
         </div>
     `,
     data: () => ({
@@ -75,12 +77,12 @@ Vue.component('activation-view', {
     methods: {
         activate() {
             if (this.license === '') {
-                alert(this.$data.translations['Please provide a license key.']);
+                alert(this.$wplsTranslations['Please provide a license key.']);
                 return;
             }
 
             if (!this.consent) {
-                alert(this.$data.translations['To use the extended funcionality of this plugin, you need to allow the required data to be sent to our servers. Don\'t worry, we don\'t share that data with anyone. But it is required to verify an activated license.']);
+                alert(this.$wplsTranslations['To use the extended funcionality of this plugin, you need to allow the required data to be sent to our servers. Don\'t worry, we don\'t share that data with anyone. But it is required to verify an activated license.']);
                 return;
             }
 
@@ -90,7 +92,7 @@ Vue.component('activation-view', {
                 type: 'post',
                 url: ajaxurl,
                 data: {
-                    action: 'wpls_v3_activate_' + this.$data.slug,
+                    action: 'wpls_v3_activate_' + PLUGIN_DATA.slug,
                     license_key: this.license
                 }
             })
@@ -98,8 +100,8 @@ Vue.component('activation-view', {
                 this.$emit('stopLoading');
 
                 if (response.activated) {
-                    this.$data.license = this.license;
-                    this.$data.active = true;
+                    PLUGIN_DATA.license = this.license;
+                    PLUGIN_DATA.active = true;
                     this.$emit('activated');
                     alert('The plugin was successfully activated!');
                 } else {
@@ -142,8 +144,8 @@ Vue.component('settings-view', {
                             <button class="button-primary" style="margin-right:10px;" @click.prevent="checkForUpdate">Check for updates</button>
                             <button class="button" @click.prevent="deactivate">Deactivate</button>
                         </span>
-                        <div style="margin-top: 10px;">{{ $data.translations['Your license key:'] }}</div>
-                        <div style="font-family: monospace;">{{ $data.license }}</div>
+                        <div style="margin-top: 10px;">{{ $wplsTranslations['Your license key:'] }}</div>
+                        <div style="font-family: monospace;">{{ usedLicense }}</div>
                     </div>
                 </div>
 
@@ -159,7 +161,10 @@ Vue.component('settings-view', {
         };
     },
     beforeMount() {
-        this.active = this.$data.active;
+        this.active = PLUGIN_DATA.active;
+    },
+    computed: {
+        usedLicense: () => PLUGIN_DATA.license
     },
     methods: {
         startLoading() {
@@ -169,7 +174,7 @@ Vue.component('settings-view', {
             this.loading = false;
         },
         checkForUpdate() {
-            window.location.href = this.$data.checkUrl.replace(/&amp;/g, '&');
+            window.location.href = PLUGIN_DATA.checkUrl.replace(/&amp;/g, '&');
         },
         activate() {
             this.site = 'activation';
@@ -181,7 +186,7 @@ Vue.component('settings-view', {
                 type: 'post',
                 url: ajaxurl,
                 data: {
-                    action: 'wpls_v3_deactivate_' + this.$data.slug
+                    action: 'wpls_v3_deactivate_' + PLUGIN_DATA.slug
                 }
             })
             .done(response => {
@@ -191,7 +196,7 @@ Vue.component('settings-view', {
                     this.active = false;
 
                     settingsButton
-                        .text(this.$data.translations['Enter License'])
+                        .text(this.$wplsTranslations['Enter License'])
                         .css('color', '#3db634');
 
                     alert(
@@ -215,7 +220,7 @@ Vue.component('settings-view', {
             this.active = true;
 
             settingsButton
-                .text(this.$data.translations['License Settings'])
+                .text(this.$wplsTranslations['License Settings'])
                 .css('color', '');
         }
     }
@@ -225,18 +230,21 @@ Vue.component('license-settings', {
     template: `
         <div>
             <h2 style="display: inline-block; margin-top: 0px;">
-                {{ $data.name }}
-                <span style="font-weight: 400;">{{ $data.translations['License Settings'] }}</span>
+                {{ name }}
+                <span style="font-weight: 400;">{{ $wplsTranslations['License Settings'] }}</span>
             </h2>
-            <a href="#" style="font-weight: 400; float: right; font-size: 12px;" @click.prevent="help">{{ $data.translations['What\\\'s this?'] }}</a>
+            <a href="#" style="font-weight: 400; float: right; font-size: 12px;" @click.prevent="help">{{ $wplsTranslations['What\\\'s this?'] }}</a>
 
             <settings-view></settings-view>        
         </div>
     `,
     methods: {
         help() {
-            alert(this.$data.translations['To enable full functionality of this plugin, all you have to do is to enter the license that was provided to you during sale. If you bought the plugin using the Envato market, you\'ll need to enter the Envato purchase code.']);
+            alert(this.$wplsTranslations['To enable full functionality of this plugin, all you have to do is to enter the license that was provided to you during sale. If you bought the plugin using the Envato market, you\'ll need to enter the Envato purchase code.']);
         }
+    },
+    computed: {
+        name: () => PLUGIN_DATA.name
     }
 });
 
