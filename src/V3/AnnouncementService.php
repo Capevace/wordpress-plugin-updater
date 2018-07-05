@@ -7,18 +7,38 @@ if (!class_exists('\\Smoolabs\\V3\\AnnouncementService', false)) :
 class AnnouncementService
 {
     protected static $noticesAlreadyRendered = false;
+    protected static $announcementServersQueried = array();
 
     protected $serverCommunicator;
+    protected $serverUrl;
     protected $pluginSlug;
+    protected $pluginPath;
 
     public function __construct($config, $serverCommunicator)
     {
         $this->serverCommunicator = $serverCommunicator;
+        $this->serverUrl          = untrailingslashit($config['serverUrl']);
         $this->pluginSlug         = $config['slug'];
         $this->pluginPath         = $config['path'];
 
+        register_activation_hook($this->pluginPath, array($this, 'onActivation'));
+        register_deactivation_hook($this->pluginPath, array($this, 'onDeactivation'));
+
+        add_action('wpls_announcements_check', array($this, 'maybeUpdateAnnouncements'));
         add_action('admin_notices', array($this, 'renderAdminNotices'));
         //add_action('wp_ajax_wpls_hide_notice_' . $this->plugin_slug, array($this, 'hide_notice'));
+    }
+
+    public function onActivation()
+    {
+        if (!wp_next_scheduled('wpls_announcements_check')) {
+            wp_schedule_event(time(), 'daily', 'wpls_announcements_check');
+        }
+    }
+
+    public function onDeactivation()
+    {
+        wp_clear_scheduled_hook('wpls_announcements_check');
     }
 
     public function renderAdminNotices()
@@ -28,7 +48,6 @@ class AnnouncementService
             return;
         static::$noticesAlreadyRendered = true;
 
-        $this->updateAnnouncements();
         $announcements = array_values(static::getGlobalAnnouncements());
 
         // Sort Announcements by creation time
@@ -54,16 +73,24 @@ class AnnouncementService
         <?php
     }
 
+    public function maybeUpdateAnnouncements()
+    {
+        if (in_array($this->serverUrl, static::$announcementServersQueried)) {
+            static::setLastFetchTime($this->pluginSlug, date('Y-m-d H:i:s T'));
+            return;
+        }
+
+        array_push(static::$announcementServersQueried, $this->serverUrl);
+
+        $this->updateAnnouncements();
+        static::setLastFetchTime($this->pluginSlug, date('Y-m-d H:i:s T'));
+    }
+
     public function updateAnnouncements()
     {
-        $lastFetchTime    = static::getLastFetchTime($this->pluginSlug);
+        $lastFetchTime    = static::getEarliestFetchTime();
         $packages         = PluginUpdater::$installedPlugins;
         $newAnnouncements = $this->serverCommunicator->fetchAnnouncements($lastFetchTime, $packages);
-
-        // Update all the fetch times
-        foreach (PluginUpdater::$installedPlugins as $plugin) {
-            static::setLastFetchTime($plugin, date('Y-m-d H:i:s T'));
-        }
 
         if (!$newAnnouncements)
             return;
@@ -98,6 +125,20 @@ class AnnouncementService
         }
 
         return false;
+    }
+
+    public static function getEarliestFetchTime()
+    {
+        $earliest_time = date('Y-m-d H:i:s T');
+
+        foreach (PluginUpdater::$installedPlugins as $pluginSlug) {
+            $time = static::getLastFetchTime($pluginSlug);
+
+            if ($time < $earliest_time)
+                $earliest_time = $time;
+        }
+
+        return $earliest_time;
     }
 
     public static function setLastFetchTime($pluginSlug, $fetchTime)
