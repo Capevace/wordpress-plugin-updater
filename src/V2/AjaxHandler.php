@@ -55,8 +55,8 @@ class AjaxHandler
       
         LicenseSettings::saveLicense(null, $this->pluginSlug);
         LicenseSettings::saveActivationId(null, $this->pluginSlug);
-
-        if (isset($response->deactivated) && $response->deactivated === true) {
+        
+        if (isset($response->deactivated) && $response->deactivated !== true) {
             wp_send_json(array(
                 'deactivated' => false, 
                 'error' => array(

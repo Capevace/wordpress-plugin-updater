@@ -54,7 +54,7 @@ Vue.component('activation-view', {
         <div>
             <span style="font-size: 15px; font-weight: 600;margin-bottom: 10px;display: block;">Activate Plugin</span>
 
-            <label style="display: block;">{{ $data.translations['License or Envato Purchase Code'] }}</label>
+            <label style="display: block;">{{ $data.translations['License or Envato Purchase Code'] }} (<a href="https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-" target="_blank">{{ $data.translations['Where do I find my Envato purchase code?'] }}</a>)</label>
             <input style="display: block; width: 100%; margin-bottom: 10px;" type="text" v-model="license" :placeholder="$data.translations['Enter License or Envato Purchase Code']" />
 
             <label style="display: block;">
@@ -97,6 +97,8 @@ Vue.component('activation-view', {
                 this.$emit('stopLoading');
 
                 if (response.activated) {
+                    this.$data.license = this.license;
+                    this.$data.active = true;
                     this.$emit('activated');
                     alert('The plugin was successfully activated!');
                 } else {
@@ -118,7 +120,7 @@ Vue.component('settings-view', {
     template: `
         <div>
             <div v-if="loading">
-                <div style="display: flex; height: 70px;">
+                <div style="display: flex; height: 100px;">
                     <div style="display: flex; flex: 0 0 100%; justify-content: center;align-items: center;">
                         <!--<span class="dashicons dashicons-update" style="font-size: 50px; color: rgba(0, 0, 0, 0.2);transform: translateX(-13px);will-change: transform;"></span>-->
                         <span>Loading...</span>
@@ -127,22 +129,21 @@ Vue.component('settings-view', {
                 
             </div>
             <div v-show="!loading">
-                <div style="display: flex; height: 70px;" v-if="site === 'overview' && !active">
-                    <div style="display: flex; flex: 0 0 100%; justify-content: center;align-items: center; /*border-right: 1px solid rgba(0, 0, 0, 0.2);*/">
+                <div style="display: flex; height: 100px;" v-if="site === 'overview' && !active">
+                    <div style="display: flex; flex: 0 0 100%; justify-content: center;align-items: center;">
                         <button class="button-primary" @click.prevent="activate">Activate</button>
                     </div>
-                    <!--<div style="display: flex; flex: 0 0 50%; justify-content: center;align-items: center;">
-                        <button class="button" @click.prevent="deactivate">Deactivate</button>
-                    </div>-->
                 </div>
 
-                <div style="display: flex; height: 70px;" v-if="site === 'overview' && active">
-                    <div style="display: flex; flex: 0 0 100%; justify-content: center;align-items: center; /*border-right: 1px solid rgba(0, 0, 0, 0.2);*/">
-                        <button class="button-primary" @click.prevent="deactivate">Deactivate</button>
+                <div style="display: flex; height: 100px;" v-if="site === 'overview' && active">
+                    <div style="display: flex; flex: 0 0 100%; justify-content: center;align-items: center;flex-direction: column;">
+                        <span>
+                            <button class="button-primary" style="margin-right:10px;" @click.prevent="checkForUpdate">Check for updates</button>
+                            <button class="button" @click.prevent="deactivate">Deactivate</button>
+                        </span>
+                        <div style="margin-top: 10px;">{{ $data.translations['Your license key:'] }}</div>
+                        <div style="font-family: monospace;">{{ $data.license }}</div>
                     </div>
-                    <!--<div style="display: flex; flex: 0 0 50%; justify-content: center;align-items: center;">
-                        <button class="button" @click.prevent="deactivate">Deactivate</button>
-                    </div>-->
                 </div>
 
                 <activation-view v-if="site === 'activation'" @activated="onActivation" @startLoading="startLoading" @stopLoading="stopLoading"></activation-view>
@@ -165,6 +166,9 @@ Vue.component('settings-view', {
         },
         stopLoading() {
             this.loading = false;
+        },
+        checkForUpdate() {
+            window.location.href = this.$data.checkUrl.replace(/&amp;/g, '&');
         },
         activate() {
             this.site = 'activation';
