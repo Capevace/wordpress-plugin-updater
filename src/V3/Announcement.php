@@ -1,10 +1,10 @@
 <?php
 
-namespace Smoolabs\V2;
+namespace Smoolabs\V3;
 
-use Smoolabs\V2\Parsedown\Parsedown;
+use Smoolabs\V3\Parsedown\Parsedown;
 
-if (!class_exists('\\Smoolabs\\V2\\Announcement', false)) :
+if (!class_exists('\\Smoolabs\\V3\\Announcement', false)) :
 
 class Announcement
 {

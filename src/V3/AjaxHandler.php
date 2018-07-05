@@ -1,8 +1,8 @@
 <?php
 
-namespace Smoolabs\V2;
+namespace Smoolabs\V3;
 
-if (!class_exists('\\Smoolabs\\V2\\AjaxHandler', false)) :
+if (!class_exists('\\Smoolabs\\V3\\AjaxHandler', false)) :
 
 class AjaxHandler
 {
@@ -14,14 +14,15 @@ class AjaxHandler
     {
         $this->serverCommunicator = $serverCommunicator;
         $this->pluginSlug         = $config['slug'];
+        $this->envatoItemId       = $config['envatoItemId'];
         $this->supportUrl         = $config['serverUrl'] . '/support/activation';
 
         add_action(
-            'wp_ajax_wpls_activate_' . $this->pluginSlug, 
+            'wp_ajax_wpls_v3_activate_' . $this->pluginSlug, 
             array($this, 'handleActivationAjaxRequest')
         );
         add_action(
-            'wp_ajax_wpls_deactivate_' . $this->pluginSlug, 
+            'wp_ajax_wpls_v3_deactivate_' . $this->pluginSlug, 
             array($this, 'handleDeactivationAjaxRequest')
         );
         add_action(
@@ -38,7 +39,7 @@ class AjaxHandler
         $response = $this->serverCommunicator->activateLicense($license);
         
         if (isset($response->activated) && $response->activated === true) {
-            LicenseSettings::saveLicense($license, $this->pluginSlug);
+            LicenseSettings::saveLicense($license, $this->pluginSlug, $this->envatoItemId);
             LicenseSettings::saveActivationId($response->activation_id, $this->pluginSlug);
         }
 
@@ -53,7 +54,7 @@ class AjaxHandler
         $activationId = LicenseSettings::getSavedActivationId($this->pluginSlug);
         $response = $this->serverCommunicator->deactivateLicense($activationId);
       
-        LicenseSettings::saveLicense(null, $this->pluginSlug);
+        LicenseSettings::saveLicense(null, $this->pluginSlug, $this->envatoItemId);
         LicenseSettings::saveActivationId(null, $this->pluginSlug);
         
         if (isset($response->deactivated) && $response->deactivated !== true) {

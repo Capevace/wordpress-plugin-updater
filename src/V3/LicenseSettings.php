@@ -1,15 +1,15 @@
 <?php
 
-namespace Smoolabs\V2;
+namespace Smoolabs\V3;
 
-if (!class_exists('\\Smoolabs\\V2\\LicenseSettings', false)) :
+if (!class_exists('\\Smoolabs\\V3\\LicenseSettings', false)) :
 
 class LicenseSettings
 {
     protected $name;
     protected $slug;
     
-    public static $VUE_VERSION    = '2.5.16';
+    public static $VUE_VERSION    = '2.5.16.cache-bust';
     public static $VUE_FILE       = 'vue-2.5.16.min.js';
 
     public function __construct($config)
@@ -30,11 +30,11 @@ class LicenseSettings
      */
     public function adminEnqueueScriptsHook($hook_suffix) {
         if ($hook_suffix === 'plugins.php') {
-            if (!wp_script_is('vue', 'registered')) {
+            if (!wp_script_is('vue-2.5.16', 'registered')) {
                 $vueUrl = plugin_dir_url(realpath(trailingslashit(__DIR__) . '../../assets/js/'. self::$VUE_FILE));
-                wp_register_script('vue', $vueUrl . self::$VUE_FILE, array(), self::$VUE_VERSION);
+                wp_register_script('vue-2.5.16', $vueUrl . self::$VUE_FILE, array(), self::$VUE_VERSION);
             }
-            wp_enqueue_script('vue');
+            wp_enqueue_script('vue-2.5.16');
         }
     }
 
@@ -108,12 +108,20 @@ class LicenseSettings
         return get_option('wpls_license_' . $pluginSlug);
     }
 
-    public static function saveLicense($license, $pluginSlug)
+    public static function saveLicense($license, $pluginSlug, $envatoItemId = null)
     {
         if ($license === null || $license === '') {
+            // Required by Envato guidelines
+            if ($envatoItemId !== null)
+                delete_option('envato_purchase_code_' . $envatoItemId);
+
             delete_option('wpls_license_' . $pluginSlug);
             return;
         }
+
+        // Required by Envato guidelines
+        if ($envatoItemId !== null)
+            update_option('envato_purchase_code_' . $envatoItemId, $license);
 
         update_option('wpls_license_' . $pluginSlug, $license, true);
     }

@@ -1,14 +1,20 @@
 <?php 
 
-namespace Smoolabs\V2;
+namespace Smoolabs\V3;
 
-if (!class_exists('\\Smoolabs\\V2\\Plugin_Updater', false)) :
+if (!class_exists('\\Smoolabs\\V3\\Plugin_Updater', false)) :
 
 /**
  * The main plugin updater class. Used for interaction between updater and implementing plugin.
  */
 class PluginUpdater 
 {
+	/**
+	 * The plugin updater version.
+	 * @var string
+	 */
+	public static $VERSION = '3.0.0';
+
 	/**
 	 * The slugs of installed plugins.
 	 * @var array
@@ -90,11 +96,12 @@ class PluginUpdater
 	{
 		// Merge config with default one so all options are set.
 		$defaultConfig = array(
-			'name'      => 'WordPress License Server Plugin',
-			'version'   => '0.0.0',
-			'path'      => null,
-			'slug'      => null,
-			'serverUrl' => null
+			'name'         => 'WordPress License Server Plugin',
+			'version'      => '0.0.0',
+			'path'         => null,
+			'slug'         => null,
+			'serverUrl'    => null,
+			'envatoItemId' => null
 		);
 		$config = array_merge($defaultConfig, $config);
 

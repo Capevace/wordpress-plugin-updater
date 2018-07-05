@@ -1,8 +1,8 @@
 <?php
 
-namespace Smoolabs\V2;
+namespace Smoolabs\V3;
 
-if (!class_exists('\\Smoolabs\\V2\\ServerCommunicator', false)) :
+if (!class_exists('\\Smoolabs\\V3\\ServerCommunicator', false)) :
 
 class ServerCommunicator
 {

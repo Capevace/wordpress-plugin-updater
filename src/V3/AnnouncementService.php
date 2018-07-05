@@ -1,8 +1,8 @@
 <?php
 
-namespace Smoolabs\V2;
+namespace Smoolabs\V3;
 
-if (!class_exists('\\Smoolabs\\V2\\AnnouncementService', false)) :
+if (!class_exists('\\Smoolabs\\V3\\AnnouncementService', false)) :
 
 class AnnouncementService
 {

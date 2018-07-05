@@ -33,9 +33,9 @@
 #
 # THIS FILE WAS MODIFIED FOR WORDPRESS USAGE by smoolabs
 
-namespace Smoolabs\V2\Parsedown;
+namespace Smoolabs\V3\Parsedown;
 
-if (!class_exists('\\Smoolabs\\V2\\Parsedown\\Parsedown')) :
+if (!class_exists('\\Smoolabs\\V3\\Parsedown\\Parsedown')) :
 
 class Parsedown
 {

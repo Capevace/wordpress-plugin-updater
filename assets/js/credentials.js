@@ -1,5 +1,6 @@
-/* global Vue $ data ajaxurl */
+/* global Vue2516 $ data ajaxurl */
 
+const Vue = Vue2516;
 let app;
 let column;
 let visible = false;
@@ -89,7 +90,7 @@ Vue.component('activation-view', {
                 type: 'post',
                 url: ajaxurl,
                 data: {
-                    action: 'wpls_activate_' + this.$data.slug,
+                    action: 'wpls_v3_activate_' + this.$data.slug,
                     license_key: this.license
                 }
             })
@@ -180,7 +181,7 @@ Vue.component('settings-view', {
                 type: 'post',
                 url: ajaxurl,
                 data: {
-                    action: 'wpls_deactivate_' + this.$data.slug
+                    action: 'wpls_v3_deactivate_' + this.$data.slug
                 }
             })
             .done(response => {
