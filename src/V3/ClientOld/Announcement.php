@@ -1,10 +1,10 @@
 <?php
 
-namespace Smoolabs\V3;
+namespace Smoolabs\WPU\V3;
 
 use Smoolabs\V3\Parsedown\Parsedown;
 
-if (!class_exists('\\Smoolabs\\V3\\Announcement', false)) :
+if (!class_exists('\\Smoolabs\\WPU\\V3\\Client\\Announcement', false)) :
 
 class Announcement
 {

@@ -1,32 +1,24 @@
 <?php
 
-namespace Smoolabs\V3;
+namespace Smoolabs\WPU\V3;
 
-if (!class_exists('\\Smoolabs\\V3\\ServerCommunicator', false)) :
-
+/**
+ * 
+ */
 class ServerCommunicator
 {
-    protected $serverUrl;
-    protected $pluginVersion;
-    protected $pluginSlug;
-    protected $siteUrl;
-    protected $unsafeDebugMode = false;
-
-    public function __construct($config)
+    public static function activateLicense($slug, $licenseKey)
     {
-        $this->serverUrl       = trailingslashit($config['serverUrl']);
-        $this->pluginVersion   = $config['version'];
-        $this->pluginSlug      = $config['slug'];
-        $this->unsafeDebugMode = defined('WP_DEBUG') && WP_DEBUG;
-    }
+        $client    = WPLSController::$clients[$slug];
+        $serverUrl = $client->config->serverUrl;
+        $siteUrl   = $client->getSiteUrl();
+        $siteMeta  = $client->getSiteMetadata();
 
-    public function activateLicense($license_key)
-    {
-        $response = $this->httpPostRequest('api/v1/license/activate', array(
-            'license'   => $license_key,
-            'slug'      => $this->pluginSlug,
-            'site'      => $this->getSiteUrl(),
-            'site-meta' => $this->getMetadata()
+        $response = static::httpPostRequest($serverUrl, 'api/v1/license/activate', array(
+            'license'   => $licenseKey,
+            'slug'      => $slug,
+            'site'      => $siteUrl,
+            'site-meta' => $siteMeta
         ));
 
         if (!$response) {
@@ -36,10 +28,13 @@ class ServerCommunicator
         return $response;
     }
 
-    public function deactivateLicense($activationId)
+    public static function deactivateLicense($slug, $activationId)
     {
-        $response = $this->httpPostRequest('api/v1/activation/' . $activationId . '/deactivate');
+        $client    = WPLSController::$clients[$slug];
+        $serverUrl = $client->config->serverUrl;
 
+        $response = static::httpPostRequest($serverUrl, 'api/v1/activation/' . $activationId . '/deactivate');
+        
         if (!$response) {
             return (object) array('deactivated' => false, 'error' => array('code' => 500, 'message' => 'An unknown error occurred.', 'response' => $response));
         }
@@ -47,9 +42,9 @@ class ServerCommunicator
         return $response;
     }
 
-    public function fetchAnnouncements($lastFetchTime, $packages)
+    public static function fetchAnnouncements($lastFetchTime, $packages)
     {
-        $response = $this->httpGetRequest('api/v1/announcements/newest', array(
+        $response = static::httpGetRequest('api/v1/announcements/newest', array(
             'after' => $lastFetchTime,
             'packages' => implode(',', $packages)
         ));
@@ -57,20 +52,9 @@ class ServerCommunicator
         return $response;
     }
 
-    protected function getSiteUrl()
+    protected static function httpPostRequest($serverUrl, $path, $body = array())
     {
-        $url = untrailingslashit(get_site_url());
-        // in case scheme relative url is passed ('//google.com')
-        $url = trim($url, '/');
-        $url = preg_replace('/^http(s)?:\/\//', '', $url);
-        $url = preg_replace('/^www\./', '', $url);
-
-        return $url;
-    }
-
-    protected function httpPostRequest($path, $body = array())
-    {
-        $url = $this->serverUrl . $path;
+        $url = $serverUrl . '/' . $path;
         
         try {
             $response = wp_remote_post($url, array(
@@ -82,6 +66,7 @@ class ServerCommunicator
             ));
             
             if(is_wp_error($response)) {
+                var_dump($response);
                 return false;
             }
 
@@ -93,9 +78,9 @@ class ServerCommunicator
         }
     }
 
-    protected function httpGetRequest($path, $query = array())
+    protected static function httpGetRequest($serverUrl, $path, $query = array())
     {
-        $url = $this->serverUrl . $path;
+        $url = $serverUrl . '/' . $path;
         $url = add_query_arg($query, $url);
         
         try {
@@ -117,30 +102,4 @@ class ServerCommunicator
             return false;
         }
     }
-
-    protected function getMetadata()
-    {
-        $data = json_encode(array(
-            'url' => get_site_url(),
-            'wp_version' => get_bloginfo('version'),
-            'package_version' => $this->pluginVersion,
-            'php_version' => phpversion()
-        ));
-
-        return $data;
-    }
-
-    public function filterPluginUpdateCheckerQuery($query_args)
-    {
-        $activation_id = LicenseSettings::getSavedActivationId($this->pluginSlug);
-        if (!empty($activation_id)) {
-            $query_args['activation'] = $activation_id;
-        }
-
-        $query_args['site-meta'] = $this->getMetadata();
-
-        return $query_args;
-    }
 }
-
-endif;

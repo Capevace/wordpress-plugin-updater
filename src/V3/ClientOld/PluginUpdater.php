@@ -1,8 +1,10 @@
 <?php 
 
-namespace Smoolabs\V3;
+namespace Smoolabs\WPU\V3;
 
-if (!class_exists('\\Smoolabs\\V3\\Plugin_Updater', false)) :
+use Server\Registry;
+
+if (!class_exists('\\Smoolabs\\WPU\\V3\\Client\\PluginUpdater', false)) :
 
 /**
  * The main plugin updater class. Used for interaction between updater and implementing plugin.
@@ -120,6 +122,7 @@ class PluginUpdater
 		$this->announcementService = new AnnouncementService($config, $this->serverCommunicator);
 		$this->ajaxHandler         = new AjaxHandler($config, $this->serverCommunicator);
 
+		Registry::registerServer($this->serverUrl);
 		$update_checker = $this->setupPluginUpdateChecker();
 	}
 

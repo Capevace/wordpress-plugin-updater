@@ -1,8 +1,8 @@
 <?php
 
-namespace Smoolabs\V3;
+namespace Smoolabs\WPU\V3;
 
-if (!class_exists('\\Smoolabs\\V3\\AjaxHandler', false)) :
+if (!class_exists('\\Smoolabs\\WPU\\V3\\Client\\AjaxHandler', false)) :
 
 class AjaxHandler
 {
