@@ -2,6 +2,8 @@
 
 namespace Smoolabs\WPU\V4;
 
+if (!class_exists('\\Smoolabs\\WPU\\V4\\ClientConfig')):
+
 /**
  * The ClientConfig is a class that just saves a config in a structured way. Nothing special here.
  */
@@ -45,3 +47,5 @@ class ClientConfig
         }
     }
 }
+
+endif;

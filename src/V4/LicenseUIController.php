@@ -2,6 +2,8 @@
 
 namespace Smoolabs\WPU\V4;
 
+if (!class_exists('\\Smoolabs\\WPU\\V4\\LicenseUIController')):
+
 /**
  * The LicenseUIController is responsible for the UI on the main plugins page,
  */
@@ -105,3 +107,5 @@ class LicenseUIController
         return $actions;
     }
 }
+
+endif;

@@ -2,6 +2,8 @@
 
 namespace Smoolabs\WPU\V4;
 
+if (!class_exists('\\Smoolabs\\WPU\\V4\\WPLSClient')):
+
 /**
  * The WPLSClient is the class that each registered plugin receives.
  */
@@ -95,3 +97,5 @@ class WPLSClient
         return $data;
     }
 }
+
+endif;

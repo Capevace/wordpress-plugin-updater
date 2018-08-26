@@ -2,6 +2,8 @@
 
 namespace Smoolabs\WPU\V4;
 
+if (!class_exists('\\Smoolabs\\WPU\\V4\\AjaxController')):
+
 /**
  * The AjaxController is responsible for managing incoming ajax requests, like activations.
  */
@@ -109,3 +111,5 @@ class AjaxController
         }
     }
 }
+
+endif;
