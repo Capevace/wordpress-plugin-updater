@@ -1,30 +1,49 @@
 <?php
 
-namespace Smoolabs\WPU\V3;
+namespace Smoolabs\WPU\V4;
 
 /**
- * 
+ * The LicenseUIController is responsible for the UI on the main plugins page,
  */
 class LicenseUIController
 {
+    protected static $VUE_FILE    = 'vue-2.5.16.min.js';
+    protected static $VUE_VERSION = '2.5.16';
+
+    /**
+     * Initialize the controller and add the actions needed.
+     */
     public static function init()
     {
-        add_action('admin_enqueue_scripts', '\Smoolabs\WPU\V3\LicenseUIController::adminEnqueueScriptsHook', 99);
-        add_action('after_plugin_row', '\Smoolabs\WPU\V3\LicenseUIController::afterPluginRowHook');
-        add_filter('plugin_action_links', '\Smoolabs\WPU\V3\LicenseUIController::pluginActionLinksHook', 10, 2);
+        add_action('admin_enqueue_scripts', '\Smoolabs\WPU\V4\LicenseUIController::adminEnqueueScriptsHook', 99);
+        add_action('after_plugin_row', '\Smoolabs\WPU\V4\LicenseUIController::afterPluginRowHook');
+        add_filter('plugin_action_links', '\Smoolabs\WPU\V4\LicenseUIController::pluginActionLinksHook', 10, 2);
+        add_filter('network_admin_plugin_action_links', '\Smoolabs\WPU\V4\LicenseUIController::pluginActionLinksHook', 10, 2);
     }
 
+    /**
+     * Enqueue vue if we're on the plugins page.
+     * 
+     * @hook admin_enqueue_scripts
+     * @param string $page The page were currently on.
+     */
     public static function adminEnqueueScriptsHook($page)
     {
         if ($page === 'plugins.php') {
             if (!wp_script_is('vue-2.5.16', 'registered')) {
-                $vueUrl = plugin_dir_url(realpath(trailingslashit(__DIR__) . '../../assets/js/'. self::$VUE_FILE));
-                wp_register_script('vue-2.5.16', $vueUrl . self::$VUE_FILE, array(), self::$VUE_VERSION);
+                $vueUrl = plugin_dir_url(realpath(trailingslashit(__DIR__) . '../../assets/js/'. static::$VUE_FILE));
+                wp_register_script('vue-2.5.16', $vueUrl . static::$VUE_FILE, array(), static::$VUE_VERSION);
             }
             wp_enqueue_script('vue-2.5.16');
         }
     }
 
+    /**
+     * Kickstart the license UI after the plugin row hook.
+     * 
+     * @hook after_plugin_row
+     * @param string $pluginFile The plugins file path.
+     */
     public static function afterPluginRowHook($pluginFile)
     {
         $client = WPLSController::fileBelongsToClient($pluginFile);
@@ -61,6 +80,14 @@ class LicenseUIController
         <?php
     }
 
+    /**
+     * Add a "Enter License" link to the plugins actions.
+     * 
+     * @hook plugin_action_links
+     * @param array $actions The plugin actions.
+     * @param string $pluginFile The plugins file path.
+     * @return array The updated actions.
+     */
     public static function pluginActionLinksHook($actions, $pluginFile)
     {
         $client = WPLSController::fileBelongsToClient($pluginFile);

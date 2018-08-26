@@ -1,9 +1,9 @@
 <?php
 
-namespace Smoolabs\WPU\V3;
+namespace Smoolabs\WPU\V4;
 
 /**
- * 
+ * The WPLSClient is the class that each registered plugin receives.
  */
 class WPLSClient
 {
@@ -16,11 +16,19 @@ class WPLSClient
         $this->setupPluginUpdateChecker();
     }
 
+    /**
+     * Check if the plugin has been activated with a license.
+     * 
+     * @return bool Is activated.
+     */
     public function isActivated()
     {
         return LicenseManager::hasActivationId($this->config->slug);
     }
 
+    /**
+     * Sets up the PUC instance running in the background for updating functionality.
+     */
     protected function setupPluginUpdateChecker()
     {
         include_once __DIR__ . '/../../plugin-update-checker-4.4/plugin-update-checker.php';
@@ -36,6 +44,12 @@ class WPLSClient
         return $updateChecker;
     }
 
+    /**
+     * Filter used to add activation ids and metadata to an update query by PUC.
+     * 
+     * @param array $queryArgs
+     * @return array
+     */
     public function filterPUCQuery($queryArgs)
     {
         $activationId = LicenseManager::getSavedActivationId($this->config->slug);
@@ -48,6 +62,11 @@ class WPLSClient
         return $queryArgs;
     }
 
+    /**
+     * Get a sites url, normalized to a specific degree.
+     * 
+     * @return string The url.
+     */
     public function getSiteUrl()
     {
         $url = untrailingslashit(get_site_url());
@@ -59,6 +78,11 @@ class WPLSClient
         return $url;
     }
 
+    /**
+     * Get the sites metadata as JSON.
+     * 
+     * @return string The metadata as JSON.
+     */
     public function getSiteMetadata()
     {
         $data = json_encode(array(

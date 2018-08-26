@@ -1,21 +1,12 @@
 <?php
 
-namespace Smoolabs\WPU\V3;
+namespace Smoolabs\WPU\V4;
 
-use Util\Singleton;
-
-if (!class_exists('\\Smoolabs\\WPU\\V3\\WPLicenseServer')):
-
-include_once 'AjaxController.php';
-include_once 'ClientConfig.php';
-include_once 'LicenseManager.php';
-include_once 'ServerCommunicator.php';
-include_once 'Translations.php';
-include_once 'LicenseUIController.php';
-include_once 'WPLSClient.php';
+if (!class_exists('\\Smoolabs\\WPU\\V4\\WPLSController')):
 
 /**
- * 
+ * The WPLSController controls all the clients (plugins/themes) and lets them with a running WPLS instance.
+ * It handles the activations, deactivations and all the other features.
  */
 class WPLSController
 {
@@ -31,15 +22,27 @@ class WPLSController
      */
     public static $clients = array();
 
+    /**
+     * Initialize the controller.
+     * 
+     * The controller is responsible for handling all the clients (plugins, themes).
+     * It should only exist and be initialized once.
+     */
     public static function init()
     {
         AjaxController::init();
         LicenseUIController::init();
-        // AnnouncementService init
-        // LicenseManager init
-        // ServerCommunicator
     }
 
+    /**
+     * Initialize a new client and introduce it to the system.
+     * 
+     * This creates a client and returns it.
+     * 
+     * @param string $serverUrl The server url the instance is located on.
+     * @param array $config The client config.
+     * @return WPLSClient The initialized client.
+     */
     public static function initClient($serverUrl, $config)
     {
         $serverUrl = untrailingslashit($serverUrl);
@@ -59,6 +62,12 @@ class WPLSController
         static::$clients[$config->slug] = $client;
     }
 
+    /**
+     * Find a client by its plugin file.
+     * 
+     * @param string $pluginFile Plugin file path.
+     * @return WPLSClient The client.
+     */
     public static function fileBelongsToClient($pluginFile)
     {
         foreach (static::$clients as $slug => $client) {
@@ -67,6 +76,20 @@ class WPLSController
         }
 
         return false;
+    }
+
+    /**
+     * Get a client in the system by its slug.
+     * 
+     * @param string $slug The package slug.
+     * @return WPLSClient The client.
+     */
+    public static function getClient($slug)
+    {
+        if (!array_key_exists($slug, static::$clients))
+            return null;
+
+        return static::$clients[$slug];
     }
 }
 

@@ -1,14 +1,19 @@
 <?php
 
-namespace Smoolabs\WPU\V3;
+namespace Smoolabs\WPU\V4;
 
 /**
- * 
+ * The class responsible for translating labels in the UI.
  */
 class Translations
 {
     protected static $licenseUITranslations = null;
 
+    /**
+     * Get the translations for the license UI on the plugins page.
+     * 
+     * @return array The translations.
+     */
     public static function getLicenseUITranslations()
     {
         if (static::$licenseUITranslations === null) {

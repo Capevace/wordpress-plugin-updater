@@ -1,15 +1,18 @@
 <?php
 
-namespace Smoolabs\WPU\V3;
+namespace Smoolabs\WPU\V4;
 
+/**
+ * The ClientConfig is a class that just saves a config in a structured way. Nothing special here.
+ */
 class ClientConfig
 {
     public $serverUrl;
     public $name;
     public $version;
     public $slug;
-    public $path;
-    public $file;
+    public $path; // The full path to the package.
+    public $file; // The basename of the package (package/package.php)
     public $envatoItemId;
 
     public function __construct(string $serverUrl, array $config)

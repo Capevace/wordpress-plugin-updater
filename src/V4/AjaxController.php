@@ -1,60 +1,72 @@
 <?php
 
-namespace Smoolabs\WPU\V3;
+namespace Smoolabs\WPU\V4;
 
 /**
- * 
+ * The AjaxController is responsible for managing incoming ajax requests, like activations.
  */
 class AjaxController
 {
+    /**
+     * Initialize the controller.
+     */
     public static function init()
     {
         static::registerAjaxHooks();
     }
 
+    /**
+     * Register the ajax hooks.
+     */
     protected static function registerAjaxHooks()
     {
         add_action(
             'wp_ajax_wpls_v3_activate', 
-            '\Smoolabs\WPU\V3\AjaxController::handleActivationAjaxRequest'
+            '\Smoolabs\WPU\V4\AjaxController::handleActivationAjaxRequest'
         );
         add_action(
             'wp_ajax_wpls_v3_deactivate', 
-            '\Smoolabs\WPU\V3\AjaxController::handleDeactivationAjaxRequest'
+            '\Smoolabs\WPU\V4\AjaxController::handleDeactivationAjaxRequest'
         );
         add_action(
             'wp_ajax_wpls_v3_dismiss_announcement',
-            '\Smoolabs\WPU\V3\AjaxController::handleDismissAnnouncementAjaxRequest'
+            '\Smoolabs\WPU\V4\AjaxController::handleDismissAnnouncementAjaxRequest'
         );
     }
 
+    /**
+     * Handle an activation request.
+     */
     public static function handleActivationAjaxRequest()
     {
         static::checkPermissisons();
 
         $license  = sanitize_text_field($_POST['license_key']);
         $slug     = sanitize_key($_POST['slug']);
-        $response = ServerCommunicator::instance()->activateLicense($slug, $license);
+        $response = WPLSApi::activateLicense($slug, $license);
         
         if (isset($response->activated) && $response->activated === true) {
-            LicenseManager::saveLicense($license, $this->pluginSlug, $this->envatoItemId);
-            LicenseManager::saveActivationId($response->activation_id, $this->pluginSlug);
+            LicenseManager::saveLicense($slug, $license);
+            LicenseManager::saveActivationId($slug, $response->activation_id);
         }
 
         wp_send_json($response);
         wp_die();
     }
 
+    /**
+     * Handle an deactivation request.
+     */
     public static function handleDeactivationAjaxRequest()
     {
         static::checkPermissisons();
 
         $slug         = sanitize_key($_POST['slug']);
         $activationId = LicenseManager::getSavedActivationId($slug);
-        $response     = ServerCommunicator::deactivateLicense($slug, $activationId);
+        $response     = WPLSApi::deactivateLicense($slug, $activationId);
         
-        LicenseManager::saveLicense(null, $slug);
-        LicenseSettings::saveActivationId(null, $slug);
+        LicenseManager::saveLicense($slug, null);
+        LicenseManager::saveActivationId($slug, null);
 
         if (isset($response->deactivated) && $response->deactivated !== true) {
             wp_send_json(array(
@@ -72,6 +84,9 @@ class AjaxController
         wp_die();
     }
 
+    /**
+     * Handle an dismissal of an announcement ajax request.
+     */
     public function handleDismissAnnouncementAjaxRequest()
     {
         static::checkPermissisons();
@@ -83,6 +98,9 @@ class AjaxController
         wp_die();
     }
 
+    /**
+     * Check if the user is allowed to change the license settings.
+     */
     protected static function checkPermissisons()
     {
         if (!current_user_can('activate_plugins')) {
