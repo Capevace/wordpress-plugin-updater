@@ -36,12 +36,11 @@ There's only one thing you'll need to do, to enable the integration once you've 
 
 In your plugins main file, paste this code:
 ```php
-$plugin_updater = new \Smoolabs\V2\PluginUpdater(array(
-  'name'      => 'Example Plugin Name',
-  'version'   => '1.0.0',
-  'path'      => __FILE__,
-  'slug'      => 'my-example-plugin',
-  'serverUrl' => 'http://update-server-url.com/'
+$client = \Smoolabs\WPU\V4\WPLSController::initClient('http://url-to-wpls.com', array(
+    'name'      => 'Example Plugin Name',
+    'version'   => '1.0.0',
+    'path'      => __FILE__,
+    'slug'      => 'example-plugin-slug'
 ));
 ```
 Now, replace *Example Plugin Name* with your plugins name, *http://update-server-url.com* with the URL where you hosted the update server, *my-example-plugin* with your plugin slug (for example the plugin folders name) and *1.0.0* with your current plugins version.
@@ -52,9 +51,9 @@ That's all you have to do! The plugin will now receive automatic updates once yo
 You may want to stop your buyers from using your plugin until they have entered their licenses. You can easily disable functionality like this:
 ```php
 // Your Updater instance
-$plugin_updater = new \Smoolabs\...;
+$client = \Smoolabs\...;
 
-if ($plugin_updater->isActivated()) {
+if ($client->isActivated()) {
   /* 
    * The User has activated the plugin.
    * Add your plugin functionality here.
