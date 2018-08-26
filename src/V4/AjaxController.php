@@ -21,15 +21,15 @@ class AjaxController
     protected static function registerAjaxHooks()
     {
         add_action(
-            'wp_ajax_wpls_v3_activate', 
+            'wp_ajax_wpls_v4_activate', 
             '\Smoolabs\WPU\V4\AjaxController::handleActivationAjaxRequest'
         );
         add_action(
-            'wp_ajax_wpls_v3_deactivate', 
+            'wp_ajax_wpls_v4_deactivate', 
             '\Smoolabs\WPU\V4\AjaxController::handleDeactivationAjaxRequest'
         );
         add_action(
-            'wp_ajax_wpls_v3_dismiss_announcement',
+            'wp_ajax_wpls_v4_dismiss_announcement',
             '\Smoolabs\WPU\V4\AjaxController::handleDismissAnnouncementAjaxRequest'
         );
     }

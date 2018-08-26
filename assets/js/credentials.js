@@ -92,7 +92,8 @@ Vue.component('activation-view', {
                 type: 'post',
                 url: ajaxurl,
                 data: {
-                    action: 'wpls_v3_activate_' + PLUGIN_DATA.slug,
+                    action: 'wpls_v4_activate',
+                    slug: PLUGIN_DATA.slug,
                     license_key: this.license
                 }
             })
@@ -186,7 +187,8 @@ Vue.component('settings-view', {
                 type: 'post',
                 url: ajaxurl,
                 data: {
-                    action: 'wpls_v3_deactivate_' + PLUGIN_DATA.slug
+                    action: 'wpls_v4_deactivate',
+                    slug: PLUGIN_DATA.slug
                 }
             })
             .done(response => {
