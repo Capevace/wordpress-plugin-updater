@@ -17,7 +17,7 @@ class ClientConfig
     public $file; // The basename of the package (package/package.php)
     public $envatoItemId;
 
-    public function __construct(string $serverUrl, array $config)
+    public function __construct($serverUrl, $config)
     {
         $this->serverUrl = untrailingslashit($serverUrl);
 
