@@ -11,7 +11,7 @@ class WPLSClient
 {
     public $config;
 
-    public function __construct(ClientConfig $config)
+    public function __construct($config)
     {
         $this->config = $config;
 
