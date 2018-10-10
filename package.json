@@ -1,0 +1,25 @@
+{
+  "name": "wordpress-plugin-updater",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Utility that makes it easy to implement update mechanisms in WordPress Plugins.",
+  "main": "index.js",
+  "scripts": {
+    "replace": "replace 'Smoolabs' 'MatthiasWeb' src/ vendor/ -r && npm run replace:psr-4 && npm run replace:require",
+    "replace:psr-4": "replace 'Smoolabs' 'MatthiasWeb' composer.json README.md",
+    "replace:require": "replace 'smoolabs/wordpress-plugin-updater' 'matthiasweb/wordpress-plugin-updater' composer.json README.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matzeeable/wordpress-plugin-updater.git"
+  },
+  "author": "Matthias Günter <support@matthias-web.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matzeeable/wordpress-plugin-updater/issues"
+  },
+  "homepage": "https://github.com/matzeeable/wordpress-plugin-updater#readme",
+  "devDependencies": {
+    "replace": "^1.0.0"
+  }
+}

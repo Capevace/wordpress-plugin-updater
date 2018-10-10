@@ -1,6 +1,12 @@
 # wordpress-plugin-updater
 The WordPress Plugin Integration for the WordPress License Server.
 
+## Preamble
+This is a forked repository of the original code of [Capevace/wordpress-plugin-updater](https://github.com/Capevace/wordpress-plugin-updater).
+This forked repository is also published to packagist so it can be installed through composer. Please note the npm script `npm run replace`
+that replaces the original `smoolabs`/`Capevace` namespaces with `MatthiasWeb` to avoid namespace conflicts. The Thanks goes to 
+Capevace (original author), this repository simply adds some modifications to meet the needs for MatthiasWeb plugins.
+
 ## Usage
 There's two ways you can integrate this and enable automatic updates for your own plugin.
 
@@ -11,7 +17,7 @@ If not, you'll need to install Composer on your computer and run `composer init`
 
 Once that is complete, run this:
 ```shell
-composer require smoolabs/wordpress-plugin-updater
+composer require matthiasweb/wordpress-plugin-updater:dev-master
 ```
 Composer will then install the integration into the ```vendor/``` folder.
 
@@ -36,12 +42,11 @@ There's only one thing you'll need to do, to enable the integration once you've 
 
 In your plugins main file, paste this code:
 ```php
-$plugin_updater = new \Smoolabs\V2\PluginUpdater(array(
-  'name'      => 'Example Plugin Name',
-  'version'   => '1.0.0',
-  'path'      => __FILE__,
-  'slug'      => 'my-example-plugin',
-  'serverUrl' => 'http://update-server-url.com/'
+$client = \MatthiasWeb\WPU\V4\WPLSController::initClient('http://url-to-wpls.com', array(
+    'name'      => 'Example Plugin Name',
+    'version'   => '1.0.0',
+    'path'      => __FILE__,
+    'slug'      => 'example-plugin-slug'
 ));
 ```
 Now, replace *Example Plugin Name* with your plugins name, *http://update-server-url.com* with the URL where you hosted the update server, *my-example-plugin* with your plugin slug (for example the plugin folders name) and *1.0.0* with your current plugins version.
@@ -52,9 +57,9 @@ That's all you have to do! The plugin will now receive automatic updates once yo
 You may want to stop your buyers from using your plugin until they have entered their licenses. You can easily disable functionality like this:
 ```php
 // Your Updater instance
-$plugin_updater = new \Smoolabs\...;
+$client = \MatthiasWeb\...;
 
-if ($plugin_updater->isActivated()) {
+if ($client->isActivated()) {
   /* 
    * The User has activated the plugin.
    * Add your plugin functionality here.
