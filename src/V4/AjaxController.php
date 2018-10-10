@@ -1,8 +1,8 @@
 <?php
 
-namespace Smoolabs\WPU\V4;
+namespace MatthiasWeb\WPU\V4;
 
-if (!class_exists('\\Smoolabs\\WPU\\V4\\AjaxController')):
+if (!class_exists('\\MatthiasWeb\\WPU\\V4\\AjaxController')):
 
 /**
  * The AjaxController is responsible for managing incoming ajax requests, like activations.
@@ -24,15 +24,15 @@ class AjaxController
     {
         add_action(
             'wp_ajax_wpls_v4_activate', 
-            '\Smoolabs\WPU\V4\AjaxController::handleActivationAjaxRequest'
+            '\MatthiasWeb\WPU\V4\AjaxController::handleActivationAjaxRequest'
         );
         add_action(
             'wp_ajax_wpls_v4_deactivate', 
-            '\Smoolabs\WPU\V4\AjaxController::handleDeactivationAjaxRequest'
+            '\MatthiasWeb\WPU\V4\AjaxController::handleDeactivationAjaxRequest'
         );
         add_action(
             'wp_ajax_wpls_v4_dismiss_announcement',
-            '\Smoolabs\WPU\V4\AjaxController::handleDismissAnnouncementAjaxRequest'
+            '\MatthiasWeb\WPU\V4\AjaxController::handleDismissAnnouncementAjaxRequest'
         );
     }
 

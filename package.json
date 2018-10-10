@@ -4,7 +4,9 @@
   "private": true,
   "description": "Utility that makes it easy to implement update mechanisms in WordPress Plugins.",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "replace": "replace 'Smoolabs' 'MatthiasWeb' src/ -r"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/matzeeable/wordpress-plugin-updater.git"

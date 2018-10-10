@@ -1,8 +1,8 @@
 <?php
 
-namespace Smoolabs\WPU\V4;
+namespace MatthiasWeb\WPU\V4;
 
-if (!class_exists('\\Smoolabs\\WPU\\V4\\ClientConfig')):
+if (!class_exists('\\MatthiasWeb\\WPU\\V4\\ClientConfig')):
 
 /**
  * The ClientConfig is a class that just saves a config in a structured way. Nothing special here.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Smoolabs\WPU\V4;
+namespace MatthiasWeb\WPU\V4;
 
-if (!class_exists('\\Smoolabs\\WPU\\V4\\Translations')):
+if (!class_exists('\\MatthiasWeb\\WPU\\V4\\Translations')):
 
 /**
  * The class responsible for translating labels in the UI.

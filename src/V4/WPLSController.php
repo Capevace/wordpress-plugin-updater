@@ -1,8 +1,8 @@
 <?php
 
-namespace Smoolabs\WPU\V4;
+namespace MatthiasWeb\WPU\V4;
 
-if (!class_exists('\\Smoolabs\\WPU\\V4\\WPLSController')):
+if (!class_exists('\\MatthiasWeb\\WPU\\V4\\WPLSController')):
 
 /**
  * The WPLSController controls all the clients (plugins/themes) and lets them with a running WPLS instance.

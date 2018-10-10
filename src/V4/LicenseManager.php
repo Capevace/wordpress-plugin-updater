@@ -1,8 +1,8 @@
 <?php
 
-namespace Smoolabs\WPU\V4;
+namespace MatthiasWeb\WPU\V4;
 
-if (!class_exists('\\Smoolabs\\WPU\\V4\\LicenseManager')):
+if (!class_exists('\\MatthiasWeb\\WPU\\V4\\LicenseManager')):
 
 /**
  * The LicenseManager is responsible for saving and gettings licenses and activation ids from the database.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Smoolabs\WPU\V4;
+namespace MatthiasWeb\WPU\V4;
 
-if (!class_exists('\\Smoolabs\\WPU\\V4\\LicenseUIController')):
+if (!class_exists('\\MatthiasWeb\\WPU\\V4\\LicenseUIController')):
 
 /**
  * The LicenseUIController is responsible for the UI on the main plugins page,
@@ -17,10 +17,10 @@ class LicenseUIController
      */
     public static function init()
     {
-        add_action('admin_enqueue_scripts', '\Smoolabs\WPU\V4\LicenseUIController::adminEnqueueScriptsHook', 99);
-        add_action('after_plugin_row', '\Smoolabs\WPU\V4\LicenseUIController::afterPluginRowHook');
-        add_filter('plugin_action_links', '\Smoolabs\WPU\V4\LicenseUIController::pluginActionLinksHook', 10, 2);
-        add_filter('network_admin_plugin_action_links', '\Smoolabs\WPU\V4\LicenseUIController::pluginActionLinksHook', 10, 2);
+        add_action('admin_enqueue_scripts', '\MatthiasWeb\WPU\V4\LicenseUIController::adminEnqueueScriptsHook', 99);
+        add_action('after_plugin_row', '\MatthiasWeb\WPU\V4\LicenseUIController::afterPluginRowHook');
+        add_filter('plugin_action_links', '\MatthiasWeb\WPU\V4\LicenseUIController::pluginActionLinksHook', 10, 2);
+        add_filter('network_admin_plugin_action_links', '\MatthiasWeb\WPU\V4\LicenseUIController::pluginActionLinksHook', 10, 2);
     }
 
     /**

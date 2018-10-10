@@ -1,8 +1,8 @@
 <?php
 
-namespace Smoolabs\WPU\V4;
+namespace MatthiasWeb\WPU\V4;
 
-if (!class_exists('\\Smoolabs\\WPU\\V4\\WPLSClient')):
+if (!class_exists('\\MatthiasWeb\\WPU\\V4\\WPLSClient')):
 
 /**
  * The WPLSClient is the class that each registered plugin receives.

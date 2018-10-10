@@ -1,8 +1,8 @@
 <?php
 
-namespace Smoolabs\WPU\V4;
+namespace MatthiasWeb\WPU\V4;
 
-if (!class_exists('\\Smoolabs\\WPU\\V4\\WPLSApi')):
+if (!class_exists('\\MatthiasWeb\\WPU\\V4\\WPLSApi')):
 
 /**
  * The WPLSApi is responsible for communicating with WPLS server instances.
