@@ -1,5 +1,5 @@
 {
-    "name": "matzeeable/wordpress-plugin-updater",
+    "name": "matthiasweb/wordpress-plugin-updater",
     "description": "A library for WordPress plugins, to utilize license verification and auto-updating using WordPress License Server.",
     "type": "library",
     "license": "MIT",
