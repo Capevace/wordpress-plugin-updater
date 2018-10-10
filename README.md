@@ -1,6 +1,12 @@
 # wordpress-plugin-updater
 The WordPress Plugin Integration for the WordPress License Server.
 
+## Preamble
+This is a forked repository of the original code of [Capevace/wordpress-plugin-updater](https://github.com/Capevace/wordpress-plugin-updater).
+This forked repository is also published to packagist so it can be installed through composer. Please note the npm script `npm run replace`
+that replaces the original `smoolabs`/`Capevace` namespaces with `MatthiasWeb` and `matzeeable` to avoid namespace conflicts. The Thanks goes to 
+Capevace (original author), this repository simply adds some modifications to meet the needs for MatthiasWeb plugins.
+
 ## Usage
 There's two ways you can integrate this and enable automatic updates for your own plugin.
 
