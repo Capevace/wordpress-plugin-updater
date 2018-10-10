@@ -7,7 +7,7 @@
   "scripts": {
     "replace": "replace 'Smoolabs' 'MatthiasWeb' src/ -r && npm run replace:psr-4 && npm run replace:require",
     "replace:psr-4": "replace 'Smoolabs' 'MatthiasWeb' composer.json README.md",
-    "replace:require": "replace 'smoolabs/wordpress-plugin-updater' 'matzeeable/wordpress-plugin-updater' composer.json README.md"
+    "replace:require": "replace 'smoolabs/wordpress-plugin-updater' 'matthiasweb/wordpress-plugin-updater' composer.json README.md"
   },
   "repository": {
     "type": "git",
