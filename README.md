@@ -17,7 +17,7 @@ If not, you'll need to install Composer on your computer and run `composer init`
 
 Once that is complete, run this:
 ```shell
-composer require smoolabs/wordpress-plugin-updater
+composer require matzeeable/wordpress-plugin-updater
 ```
 Composer will then install the integration into the ```vendor/``` folder.
 
@@ -42,7 +42,7 @@ There's only one thing you'll need to do, to enable the integration once you've 
 
 In your plugins main file, paste this code:
 ```php
-$client = \Smoolabs\WPU\V4\WPLSController::initClient('http://url-to-wpls.com', array(
+$client = \MatthiasWeb\WPU\V4\WPLSController::initClient('http://url-to-wpls.com', array(
     'name'      => 'Example Plugin Name',
     'version'   => '1.0.0',
     'path'      => __FILE__,
@@ -57,7 +57,7 @@ That's all you have to do! The plugin will now receive automatic updates once yo
 You may want to stop your buyers from using your plugin until they have entered their licenses. You can easily disable functionality like this:
 ```php
 // Your Updater instance
-$client = \Smoolabs\...;
+$client = \MatthiasWeb\...;
 
 if ($client->isActivated()) {
   /* 

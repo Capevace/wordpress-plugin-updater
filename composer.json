@@ -1,5 +1,5 @@
 {
-    "name": "smoolabs/wordpress-plugin-updater",
+    "name": "matzeeable/wordpress-plugin-updater",
     "description": "A library for WordPress plugins, to utilize license verification and auto-updating using WordPress License Server.",
     "type": "library",
     "license": "MIT",
@@ -7,12 +7,16 @@
         {
             "name": "Lukas Mateffy",
             "email": "info@smoolabs.com"
+        },
+        {
+            "name": "Matthias Günter",
+            "email": "support@matthias-web.com"
         }
     ],
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "Smoolabs\\WPU\\": "src/"
+            "MatthiasWeb\\WPU\\": "src/"
         }
     }
 }
