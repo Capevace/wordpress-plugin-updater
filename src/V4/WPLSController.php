@@ -60,6 +60,7 @@ class WPLSController
         }
 
         static::$clients[$config->slug] = $client;
+        return $client;
     }
 
     /**
