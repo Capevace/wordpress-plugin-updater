@@ -51,7 +51,8 @@ class LicenseManager
      */
     public static function hasLicense($pluginSlug)
     {
-        return !empty(static::getSavedLicense($pluginSlug));
+        $result = static::getSavedLicense($pluginSlug);
+        return !empty($result);
     }
 
     /**
@@ -92,7 +93,8 @@ class LicenseManager
      */
     public static function hasActivationId($pluginSlug)
     {
-        return !empty(static::getSavedActivationId($pluginSlug));
+        $result = static::getSavedActivationId($pluginSlug);
+        return !empty($result);
     }
 }
 
