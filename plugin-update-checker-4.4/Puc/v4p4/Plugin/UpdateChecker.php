@@ -438,7 +438,7 @@ if ( !class_exists('Puc_v4p4_Plugin_UpdateChecker', false) ):
 					if ( $pluginData['PluginURI'] ) {
 						$escapedPluginUri = esc_url($pluginData['PluginURI']);
 						foreach ($pluginMeta as $linkIndex => $existingLink) {
-							if ( strpos($existingLink, $escapedPluginUri) !== false ) {
+							if ( is_string($escapedPluginUri) && strpos($existingLink, $escapedPluginUri) !== false ) {
 								$visitPluginSiteLinkIndex = $linkIndex;
 								$viewDetailsLinkPosition = apply_filters(
 									$this->getUniqueName('view_details_link_position'),
@@ -638,7 +638,7 @@ if ( !class_exists('Puc_v4p4_Plugin_UpdateChecker', false) ):
 				$muPluginDir = realpath(WPMU_PLUGIN_DIR);
 				$pluginPath  = realpath($this->pluginAbsolutePath);
 
-				$cachedResult = (strpos($pluginPath, $muPluginDir) === 0);
+				$cachedResult = (is_string($muPluginDir) && strpos($pluginPath, $muPluginDir) === 0);
 			}
 
 			return $cachedResult;
