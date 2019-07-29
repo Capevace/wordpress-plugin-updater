@@ -54,8 +54,8 @@ class AjaxController
             
             // Send newsletter request
             if (!empty($email)) {
-                do_action('wpls_email_' . $client->config->slug, $email);
-                $email = update_site_option('wpls_email_' . $client->config->slug, $email);
+                do_action('wpls_email_' . $slug, $email);
+                $email = update_site_option('wpls_email_' . $slug, $email);
             }
         }
 
