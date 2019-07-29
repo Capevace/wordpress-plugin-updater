@@ -56,6 +56,11 @@ Vue.component('activation-view', {
     template: `
         <div>
             <span style="font-size: 15px; font-weight: 600;margin-bottom: 10px;display: block;">Activate Plugin</span>
+            
+            <template v-if="$data.newsletterPrivacy != ''">
+                <label style="display: block;">{{ $wplsTranslations['Email'] }} ({{ $wplsTranslations['We do not send any emails to you'] }})</label>
+                <input style="display: block; width: 100%; margin-bottom: 10px;" type="text" v-model="email" :placeholder="$wplsTranslations['Enter your email']" />
+            </template>
 
             <label style="display: block;">{{ $wplsTranslations['License or Envato Purchase Code'] }} (<a href="https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-" target="_blank">{{ $wplsTranslations['Where do I find my Envato purchase code?'] }}</a>)</label>
             <input style="display: block; width: 100%; margin-bottom: 10px;" type="text" v-model="license" :placeholder="$wplsTranslations['Enter License or Envato Purchase Code']" />
@@ -66,18 +71,32 @@ Vue.component('activation-view', {
                     {{ $wplsTranslations['I allow the following data to be sent to our update servers: license key, site url, WordPress version, PHP version and package version. This data is required to provide license activation and update functionality.'] }}
                 </span>
             </label>
+            
+            <label style="display: block;" v-if="$data.newsletterPrivacy != ''">
+                <input style="float: left;margin-top: 0px;" type="checkbox" v-model="newsletter"/>
+                <span style="font-size: 11px;display: block;margin: 10px 0 10px 27px">
+                    {{ $wplsTranslations['I want to receive sales offers and MatthiasWeb WordPress news via email and agree to the privacy policy.'] }} <a :href="$data.newsletterPrivacy" target="_blank">{{ $wplsTranslations['Privacy policy (external link)'] }}</a>
+                </span>
+            </label>
 
             <button class="button-primary" @click.prevent="activate">{{ $wplsTranslations['Activate'] }}</button>
         </div>
     `,
     data: () => ({
         license: '',
-        consent: false
+        consent: false,
+        email: "",
+        newsletter: false
     }),
     methods: {
         activate() {
             if (this.license === '') {
                 alert(this.$wplsTranslations['Please provide a license key.']);
+                return;
+            }
+            
+            if (PLUGIN_DATA.newsletterPrivacy && this.email === "") {
+                alert(this.$wplsTranslations["Please provide an email."]);
                 return;
             }
 
@@ -94,7 +113,8 @@ Vue.component('activation-view', {
                 data: {
                     action: 'wpls_v4_activate',
                     slug: PLUGIN_DATA.slug,
-                    license_key: this.license
+                    license_key: this.license,
+                    email: this.newsletter ? this.email : ""
                 }
             })
             .done(response => {

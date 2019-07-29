@@ -45,11 +45,18 @@ class AjaxController
 
         $license  = sanitize_text_field($_POST['license_key']);
         $slug     = sanitize_key($_POST['slug']);
+        $email    = sanitize_email($_POST['email']);
         $response = WPLSApi::activateLicense($slug, $license);
         
         if (isset($response->activated) && $response->activated === true) {
             LicenseManager::saveLicense($slug, $license);
             LicenseManager::saveActivationId($slug, $response->activation_id);
+            
+            // Send newsletter request
+            if (!empty($email)) {
+                do_action('wpls_email_' . $client->config->slug, $email);
+                $email = update_site_option('wpls_email_' . $client->config->slug, $email);
+            }
         }
 
         wp_send_json($response);

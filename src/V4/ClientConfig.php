@@ -15,6 +15,7 @@ class ClientConfig
     public $slug;
     public $path; // The full path to the package.
     public $file; // The basename of the package (package/package.php)
+    public $newsletterPrivacy;
     public $envatoItemId;
 
     public function __construct($serverUrl, $config)
@@ -28,6 +29,10 @@ class ClientConfig
         $this->version = array_key_exists('version', $config)
             ? strval($config['version'])
             : '0.0.0';
+            
+        $this->newsletterPrivacy = array_key_exists('newsletterPrivacy', $config)
+            ? strval($config['newsletterPrivacy'])
+            : '';
 
         $this->envatoItemId = array_key_exists('envatoItemId', $config)
             ? strval($config['envatoItemId'])

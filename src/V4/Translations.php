@@ -34,6 +34,17 @@ class Translations
                 'Plugin could not be activated. The license key is invalid.' => __('Plugin could not be activated. The license key is invalid.', 'smoolabs-updater'),
                 'Plugin could not be activated. An unknown error occurred.'  => __('Plugin could not be activated. An unknown error occurred.', 'smoolabs-updater'),
                 'What\'s this?'                                              => __('What\'s this?', 'smoolabs-updater'),
+                
+                'Email' => __('Email', 'smoolabs-updater'),
+                'We do not send any emails to you' => __('We do not send any emails to you', 'smoolabs-updater'),
+                'Enter your email' => __('Enter your email', 'smoolabs-updater'),
+                'I want to receive sales offers and MatthiasWeb WordPress news via email and agree to the privacy policy.' => __(
+                    'I want to receive sales offers and MatthiasWeb WordPress news via email and agree to the privacy policy.',
+                    'smoolabs-updater'
+                ),
+                'Please provide an email.' => __('Please provide an email.', 'smoolabs-updater'),
+                'Privacy policy (external link)' => __('Privacy policy (external link)', 'smoolabs-updater'),
+                //'' => __('', 'smoolabs-updater'),
 
                 'To enable full functionality of this plugin, all you have to do is to enter the license that was provided to you during sale. If you bought the plugin using the Envato market, you\'ll need to enter the Envato purchase code.' => __('To enable full functionality of this plugin, all you have to do is to enter the license that was provided to you during sale. If you bought the plugin using the Envato market, you\'ll need to enter the Envato purchase code.', 'smoolabs-updater'),
                 'Enter License'                                              => __('Enter License', 'smoolabs-updater'),

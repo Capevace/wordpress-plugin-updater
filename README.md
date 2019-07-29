@@ -73,3 +73,25 @@ if ($client->isActivated()) {
 ```
 
 *Please make sure that this complies with Envato's rules on locking fieatures behind licenses! The plugin may not be accepted otherwise.*
+
+## Enable newsletter functionality
+You can create an extra input so the user has to enter an email address. There is an additionally checkbox which can optionally be checked so the user gets newsletters.
+
+```php
+$client = \MatthiasWeb\WPU\V4\WPLSController::initClient('http://url-to-wpls.com', array(
+    // [...]
+    'slug'      => 'example-plugin-slug',
+    'newsletterPrivacy' => 'https://matthias-web.com/privacypolicy/'
+    // [...]
+));
+```
+
+You have to add the config argument `newsletterPrivacy` with the link to your privacy page. If the user agrees to that the following action is fired:
+
+```php
+// do_action('wpls_email_' . $client->config->slug, $email); // Your slug
+
+add_action('wpls_email_example-plugin-slug', function($email) {
+  // Do some POSTs
+});
+```
