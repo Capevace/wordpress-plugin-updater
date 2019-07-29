@@ -56,6 +56,7 @@ class LicenseUIController
         $debugMode          = defined('WP_DEBUG') && WP_DEBUG;
         $translations       = Translations::getLicenseUITranslations();
         $license            = LicenseManager::getSavedLicense($client->config->slug);
+        $email              = get_site_option('wpls_email_' . $client->config->slug, null);
         $checkForUpdatesUrl = wp_nonce_url(
             add_query_arg(
                 array('puc_check_for_updates' => 1, 'puc_slug' => $client->config->slug), 
@@ -69,15 +70,20 @@ class LicenseUIController
             'name'         => $client->config->name,
             'slug'         => $client->config->slug,
             'license'      => $license,
+            'newsletterPrivacy' => isset($client->config->newsletterPrivacy)
+                ? $client->config->newsletterPrivacy
+                : null,
+            'email'        => $email,
             'active'       => !empty($license),
             'checkUrl'     => $checkForUpdatesUrl
         );
 
         ?>
             <script type="text/javascript">
+                // Vue Code
                 (function($, data) {
                     <?php echo file_get_contents(__DIR__ . '../../../assets/js/credentials' . (WP_DEBUG ? '' : '-transpiled') . '.js'); ?>
-                })(jQuery, <?php echo json_encode($data); ?>);
+                })(jQuery, /* Vue model data */ <?php echo json_encode($data, JSON_PRETTY_PRINT); ?>);
             </script>
         <?php
     }
