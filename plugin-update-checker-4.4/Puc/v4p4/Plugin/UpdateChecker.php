@@ -638,7 +638,8 @@ if ( !class_exists('Puc_v4p4_Plugin_UpdateChecker', false) ):
 				$muPluginDir = realpath(WPMU_PLUGIN_DIR);
 				$pluginPath  = realpath($this->pluginAbsolutePath);
 
-				$cachedResult = (strpos($pluginPath, $muPluginDir) === 0);
+				//$cachedResult = (strpos($pluginPath, $muPluginDir) === 0);
+				$cachedResult = (($pluginPath && $muPluginDir) && (strpos((string)$pluginPath,(string)$muPluginDir)==0));
 			}
 
 			return $cachedResult;
