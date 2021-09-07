@@ -1,5 +1,5 @@
 # wordpress-plugin-updater
-The WordPress Plugin Integration for the WordPress License Server.
+The WordPress Plugin Integration for the [WordPress License Server](https://github.com/capevace/wpls).
 
 ## Usage
 There's two ways you can integrate this and enable automatic updates for your own plugin.
